@@ -4,7 +4,7 @@ you agree to license your contribution under the MIT license
 to this project.**
 
 
-# 1. Hvað er JS Gröf
+# 1. Hvað er JS Gröf?
 JS Gröf er einfalt og þægilegt viðmót til að búa til gröf á vefsíðum. Viðmótið notar canvas nóðuna til þess að teikna **línurit**, **punktarit**, **skífurit**, **súlurit** og **tíðnirit**. Aðeins þarf að taka fram id á canvas nóðu úr HTML skjalinu og gögn sem birta á á grafinu ásamt einhverjum sniðugum aukastillingum sem viðmótið leyfir. Hægt er að 'animate'-a gröfin og bíður viðmótið uppá ýmsa valmöguleika hvað það varðar.
 
 # 2. Síður sem nota JS Gröf
