@@ -1,11 +1,6 @@
-/*
-	TODO:
-		5. Documentation
-		7. Interactivity
-*/
-const Charts = {};
+const JSGrof = {};
 
-Charts.CHART_CONSTANTS = {
+JSGrof.CHART_CONSTANTS = {
 	BG_COLOR: '#222222',
 	STROKE_COLOR: '#FFFFFF',
 	DATA_COLORS: [
@@ -29,33 +24,33 @@ Charts.CHART_CONSTANTS = {
 	FLOAT_FORMAT: '.'
 }
 
-Charts.ChartPrototype = {
+JSGrof.ChartPrototype = {
 
 	_initOptions(options) {
 
 		if(this.error) return;
 
-		if(typeof(options) !== 'object') {
-			this._errorMessage('_initOptions', 'options must be of type object.');
+		if(!options.constructor || options.constructor.name !== 'Object') {
+			this._errorMessage('_initOptions', 'options must be of type Object.');
 		}
 
 		// Padding
-		this.chartPaddingLeft = options.chartPaddingLeft ?? Charts.CHART_CONSTANTS.CHART_PADDING_LEFT;
+		this.chartPaddingLeft = options.chartPaddingLeft ?? JSGrof.CHART_CONSTANTS.CHART_PADDING_LEFT;
 		if(!this._checkFloat(this.chartPaddingLeft, 0, 1)) {
 			this._errorMessage('_initOptions', 'chartPaddingLeft must be a number between 0 and 1.');
 			return;
 		}
-		this.chartPaddingRight = options.chartPaddingRight ?? Charts.CHART_CONSTANTS.CHART_PADDING_RIGHT;
+		this.chartPaddingRight = options.chartPaddingRight ?? JSGrof.CHART_CONSTANTS.CHART_PADDING_RIGHT;
 		if(!this._checkFloat(this.chartPaddingRight, 0, 1)) {
 			this._errorMessage('_initOptions', 'chartPaddingRight must be a number between 0 and 1.');
 			return;
 		}
-		this.chartPaddingTop = options.chartPaddingTop ?? Charts.CHART_CONSTANTS.CHART_PADDING_TOP;
+		this.chartPaddingTop = options.chartPaddingTop ?? JSGrof.CHART_CONSTANTS.CHART_PADDING_TOP;
 		if(!this._checkFloat(this.chartPaddingTop, 0, 1)) {
 			this._errorMessage('_initOptions', 'chartPaddingTop must be a number between 0 and 1.');
 			return;
 		}
-		this.chartPaddingBottom = options.chartPaddingBottom ?? Charts.CHART_CONSTANTS.CHART_PADDING_BOTTOM;
+		this.chartPaddingBottom = options.chartPaddingBottom ?? JSGrof.CHART_CONSTANTS.CHART_PADDING_BOTTOM;
 		if(!this._checkFloat(this.chartPaddingBottom, 0, 1)) {
 			this._errorMessage('_initOptions', 'chartPaddingBottom must be a number between 0 and 1.');
 			return;
@@ -65,12 +60,12 @@ Charts.ChartPrototype = {
 		}
 
 		// Colors
-		this.bgColor = options.bgColor === undefined ? Charts.CHART_CONSTANTS.BG_COLOR : options.bgColor;
+		this.bgColor = options.bgColor === undefined ? JSGrof.CHART_CONSTANTS.BG_COLOR : options.bgColor;
 		if(this.bgColor !== null && !this._checkSixDigitHex(this.bgColor)) {
 			this._errorMessage('_initOptions', 'bgColor must be either null or a six digit hex value string, for example ("#AA9999")');
 			return;
 		}
-		this.strokeColor = options.strokeColor === undefined ? Charts.CHART_CONSTANTS.STROKE_COLOR : options.strokeColor;
+		this.strokeColor = options.strokeColor === undefined ? JSGrof.CHART_CONSTANTS.STROKE_COLOR : options.strokeColor;
 		if(!this._checkSixDigitHex(this.strokeColor)) {
 			this._errorMessage('_initOptions', 'strokeColor must be a six digit hex value string, for example ("#AA9999")');
 			return;
@@ -80,11 +75,11 @@ Charts.ChartPrototype = {
 			this._errorMessage('_initOptions', 'axisColor must be a six digit hex value string, for example ("#AA9999")');
 			return;
 		}
-		this.dataColors = options.dataColors === undefined ? Charts.CHART_CONSTANTS.DATA_COLORS : options.dataColors;
+		this.dataColors = options.dataColors === undefined ? JSGrof.CHART_CONSTANTS.DATA_COLORS : options.dataColors;
 		if(!this.dataColors) {
 			this._errorMessage('_initOptions', 'Missing dataColors.');
 			return;
-		} else if(typeof(this.dataColors) !== 'object') {
+		} else if(!this.dataColors.constructor || this.dataColors.constructor.name !== 'Array') {
 			this._errorMessage('_initOptions', 'dataColors must be an array of hex value strings.');
 			return;
 		} else if(this.dataColors.length === 0) {
@@ -100,19 +95,19 @@ Charts.ChartPrototype = {
 		}
 
 		// Scaling
-		this.fontSize = options.fontSize ?? Charts.CHART_CONSTANTS.FONT_SIZE;
+		this.fontSize = options.fontSize ?? JSGrof.CHART_CONSTANTS.FONT_SIZE;
 		if(!this._checkFloat(this.fontSize, 0, 100)) {
 			this._errorMessage('_initOptions', 'fontSize must be a number between 0 and 100.');
 			return;
 		}
 		this.fontSizeConstant = this.fontSize;
 
-		this.resolutionUpscale = options.resolutionUpscale ?? Charts.CHART_CONSTANTS.RESOLUTION_UPSCALE;
+		this.resolutionUpscale = options.resolutionUpscale ?? JSGrof.CHART_CONSTANTS.RESOLUTION_UPSCALE;
 		if(!this._checkFloat(this.resolutionUpscale, 0, 4)) {
 			this._errorMessage('_initOptions', 'resolutionUpscale must be a number between 0 and 4.');
 			return;
 		}
-		this.lineWidth = options.lineWidth ?? Charts.CHART_CONSTANTS.LINE_WIDTH;
+		this.lineWidth = options.lineWidth ?? JSGrof.CHART_CONSTANTS.LINE_WIDTH;
 		if(!this._checkFloat(this.lineWidth, 0.01, 100)) {
 			this._errorMessage('_initOptions', 'lineWidth must be a number between 0.01 and 100.');
 			return;
@@ -132,7 +127,7 @@ Charts.ChartPrototype = {
 		if(this.title && this.title.length > 0 && options.chartPaddingTop === undefined) {
 			this.chartPaddingTop += 0.1;
 		}
-		this.titleSize = options.titleSize ?? Charts.CHART_CONSTANTS.TITLE_SIZE;
+		this.titleSize = options.titleSize ?? JSGrof.CHART_CONSTANTS.TITLE_SIZE;
 		if(!this._checkFloat(this.titleSize, 0, 10)) {
 			this._errorMessage('_initOptions', 'titleSize must be a number between 0 and 10.');
 			return;
@@ -158,7 +153,7 @@ Charts.ChartPrototype = {
 		this.axisLabels = options.axisLabels;
 		if(this.axisLabels === undefined) {
 			
-		} else if(typeof(this.axisLabels) !== 'object') {
+		} else if(!this.axisLabels.constructor || this.axisLabels.constructor.name !== 'Array') {
 			this._errorMessage('_initOptions', 'axisLabels must be an array of strings.');
 			return;
 		} else if(this.axisLabels.length === 0) {
@@ -243,7 +238,7 @@ Charts.ChartPrototype = {
 		// LineChart lines and points
 		this.lines = options.lines !== undefined ? options.lines : true;
 		if(this.lines !== undefined) {
-			if(!this._checkBoolean(this.lines) && typeof(this.lines) !== 'object') {
+			if(!this._checkBoolean(this.lines) && (!this.lines.constructor || this.lines.constructor.name !== 'Array')) {
 				this._errorMessage('_initOptions', 'lines must be either a boolean or an array of booleans.');
 				return;
 			}
@@ -262,7 +257,7 @@ Charts.ChartPrototype = {
 		}
 		this.points = options.points  !== undefined ? options.points : true;
 		if(this.points !== undefined) {
-			if(!this._checkBoolean(this.points) && typeof(this.points) !== 'object') {
+			if(!this._checkBoolean(this.points) && (!this.points.constructor || this.points.constructor.name !== 'Array')) {
 				this._errorMessage('_initOptions', 'points must be either a boolean or an array of booleans.');
 				return;
 			}
@@ -307,7 +302,7 @@ Charts.ChartPrototype = {
 			this._errorMessage('_initOptions', 'dynamicFontSize must be a boolean.');
 			return;
 		}
-		this.dynamicFontSizeCenter = options.dynamicFontSizeCenter ?? Charts.CHART_CONSTANTS.DYNAMIC_FONTSIZE_CENTER;
+		this.dynamicFontSizeCenter = options.dynamicFontSizeCenter ?? JSGrof.CHART_CONSTANTS.DYNAMIC_FONTSIZE_CENTER;
 		if(!this._checkFloat(this.dynamicFontSizeCenter, 1, 10000)) {
 			this._errorMessage('_initOptions', 'dynamicFontSizeCenter must be a number between 1 and 10000.');
 			return;
@@ -367,17 +362,17 @@ Charts.ChartPrototype = {
 			this._errorMessage('_initOptions', 'interactive must be a boolean.');
 			return;
 		}
-		this.interactivityPrecisionX = options.interactivityPrecisionX ?? Charts.CHART_CONSTANTS.DYNAMIC_FONTSIZE_CENTER;
+		this.interactivityPrecisionX = options.interactivityPrecisionX ?? JSGrof.CHART_CONSTANTS.DYNAMIC_FONTSIZE_CENTER;
 		if(this.interactive && this.type === 'linechart' && !this._checkFloat(this.interactivityPrecisionX, 0, 100)) {
 			this._errorMessage('_initOptions', 'interactivityPrecisionX must be a number between 0 and 100.');
 			return;
 		}
-		this.interactivityPrecisionY = options.interactivityPrecisionY ?? Charts.CHART_CONSTANTS.DYNAMIC_FONTSIZE_CENTER;
+		this.interactivityPrecisionY = options.interactivityPrecisionY ?? JSGrof.CHART_CONSTANTS.DYNAMIC_FONTSIZE_CENTER;
 		if(this.interactive && this.type === 'linechart' && !this._checkFloat(this.interactivityPrecisionY, 0, 100)) {
 			this._errorMessage('_initOptions', 'interactivityPrecisionY must be a number between 0 and 100.');
 			return;
 		}
-		this.interactivityPercentagePrecision = options.interactivityPercentagePrecision ?? Charts.CHART_CONSTANTS.DYNAMIC_FONTSIZE_CENTER;
+		this.interactivityPercentagePrecision = options.interactivityPercentagePrecision ?? JSGrof.CHART_CONSTANTS.DYNAMIC_FONTSIZE_CENTER;
 		if(this.interactive && this.type === 'piechart' && !this._checkFloat(this.interactivityPercentagePrecision, 0, 100)) {
 			this._errorMessage('_initOptions', 'interactivityPercentagePrecision must be a number between 0 and 100.');
 			return;
@@ -391,7 +386,7 @@ Charts.ChartPrototype = {
 		}
 
 		// Float formatting
-		this.floatFormat = options.floatFormat ?? Charts.CHART_CONSTANTS.FLOAT_FORMAT;
+		this.floatFormat = options.floatFormat ?? JSGrof.CHART_CONSTANTS.FLOAT_FORMAT;
 		if(this.floatFormat !== undefined && !this._checkString(this.floatFormat)) {
 			this._errorMessage('_initOptions', 'floatFormat must be a string.');
 			return;
@@ -788,6 +783,8 @@ Charts.ChartPrototype = {
 
 	animate(options) {
 
+		if(this.error) return;
+
 		if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
 			this.draw();
 			return;
@@ -906,7 +903,7 @@ Charts.ChartPrototype = {
 	}
 }
 
-Charts.LineChart = function (canvasId, data, options) {
+JSGrof.LineChart = function (canvasId, data, options) {
 	
 	this.type = 'linechart';
 
@@ -914,7 +911,7 @@ Charts.LineChart = function (canvasId, data, options) {
 	this._initCanvas(canvasId);
 	
 	/* Data validation */
-	if(typeof(data) !== 'object') {
+	if(!data.constructor || data.constructor.name !== 'Object') {
 		this._errorMessage('linechart', 'data must be of type object.');
 		return;
 	}
@@ -924,8 +921,8 @@ Charts.LineChart = function (canvasId, data, options) {
 	}
 	for(let i = 0; i < Object.keys(data).length; i++) {
 		let values = Object.values(data)[i];
-		if(typeof(values) !== 'object') {
-			this._errorMessage('linechart', 'Incorrect function in data.');
+		if(!values.constructor || values.constructor.name !== 'Array') {
+			this._errorMessage('linechart', 'Incorrect function in data. Values must be of type Array.');
 			return;
 		}
 		if(values.length === 0) {
@@ -934,19 +931,19 @@ Charts.LineChart = function (canvasId, data, options) {
 		}
 		for(let j = 0; j < values.length; j++) {
 			let point = values[j];
-			if(typeof(point) !== 'object') {
-				this._errorMessage('linechart', 'Incorrect datapoint in function.');
+			if(!point.constructor || point.constructor.name !== 'Array') {
+				this._errorMessage('linechart', 'Incorrect datapoint in function. datapoint must be of type Array.');
 				return;
 			}
 			if(point.length !== 2) {
-				this._errorMessage('linechart', 'Incorrect datapoint in function.');
+				this._errorMessage('linechart', 'Incorrect datapoint in function. Length must be 2 (x and y value).');
 				return;
 			}
 			if(
 				!this._checkFloat(point[0], -Infinity, Infinity)
 				|| !this._checkFloat(point[1], -Infinity, Infinity)
 			) {
-				this._errorMessage('linechart', 'Incorrect datapoint in function.');
+				this._errorMessage('linechart', 'Incorrect datapoint in function. All values should be numbers.');
 				return;
 			}
 		}
@@ -1086,7 +1083,7 @@ Charts.LineChart = function (canvasId, data, options) {
 							(x - startX) / (endX - startX),
 							(y - startY) / (endY - startY)
 						),					
-						this.resolutionUpscale*3*(this.fontSize/Charts.CHART_CONSTANTS.FONT_SIZE),
+						this.resolutionUpscale*3*(this.fontSize/JSGrof.CHART_CONSTANTS.FONT_SIZE),
 						0,
 						360 
 					)
@@ -1211,19 +1208,40 @@ Charts.LineChart = function (canvasId, data, options) {
 			this.ctx.fillStyle = this.strokeColor;
 			let txt;
 			if(this.axisLabels && parseInt(closest[0]) === closest[0]) {
-				txt = `(${(this.axisLabels[parseInt(closest[0])])}; ${this._formatFloat((closest[1]).toFixed(this.interactivityPrecisionY)) + (this.tickSuffixY ?? '')})`;
+				txt = `${(this.axisLabels[parseInt(closest[0])])}; ${this._formatFloat((closest[1]).toFixed(this.interactivityPrecisionY)) + (this.tickSuffixY ?? '')}`;
 			} else {
-				txt = `(${this._formatFloat((closest[0]).toFixed(this.interactivityPrecisionX)) + (this.tickSuffixX ?? '')}; ${this._formatFloat((closest[1]).toFixed(this.interactivityPrecisionY)) + (this.tickSuffixY ?? '')})`;
+				txt = `${this._formatFloat((closest[0]).toFixed(this.interactivityPrecisionX)) + (this.tickSuffixX ?? '')}; ${this._formatFloat((closest[1]).toFixed(this.interactivityPrecisionY)) + (this.tickSuffixY ?? '')}`;
 			}
+			let txtWidth = this.ctx.measureText(txt).width;
+			this.ctx.fillStyle = this.bgColor ?? this._getBWContrasting(this.strokeColor);
+			this.ctx.strokeStyle = this.strokeColor;
+			this.ctx.beginPath();
+			this.ctx.roundRect ? this.ctx.roundRect(
+					pos[0] - txtWidth/2 - this.fontSize*this.resolutionUpscale/2, 
+					pos[1] - 3.5*this.resolutionUpscale*5*(this.fontSize/JSGrof.CHART_CONSTANTS.FONT_SIZE) - this.fontSize*this.resolutionUpscale/2 - this.fontSize*this.resolutionUpscale/2,
+					txtWidth + this.fontSize*this.resolutionUpscale,
+					this.fontSize*this.resolutionUpscale + this.fontSize*this.resolutionUpscale,
+					this.fontSize*this.resolutionUpscale/2
+			) : this.ctx.rect(
+					pos[0] - txtWidth/2 - this.fontSize*this.resolutionUpscale/2, 
+					pos[1] - 3.5*this.resolutionUpscale*5*(this.fontSize/JSGrof.CHART_CONSTANTS.FONT_SIZE) - this.fontSize*this.resolutionUpscale/2 - this.fontSize*this.resolutionUpscale/2,
+					txtWidth + this.fontSize*this.resolutionUpscale,
+					this.fontSize*this.resolutionUpscale + this.fontSize*this.resolutionUpscale
+			);
+			this.ctx.closePath();
+			this.ctx.fill();
+			this.ctx.stroke();
+
+			this.ctx.fillStyle = this.strokeColor;
 			this.ctx.fillText(
 				txt,
-				pos[0], pos[1] - 3*this.resolutionUpscale*5*(this.fontSize/Charts.CHART_CONSTANTS.FONT_SIZE)
+				pos[0], pos[1] - 3.5*this.resolutionUpscale*5*(this.fontSize/JSGrof.CHART_CONSTANTS.FONT_SIZE)
 			);
 			this.ctx.beginPath();
 			this.ctx.arc(
 				pos[0],
 				pos[1],
-				this.resolutionUpscale*5*(this.fontSize/Charts.CHART_CONSTANTS.FONT_SIZE), 
+				this.resolutionUpscale*5*(this.fontSize/JSGrof.CHART_CONSTANTS.FONT_SIZE), 
 				0,
 				360
 			);
@@ -1233,9 +1251,9 @@ Charts.LineChart = function (canvasId, data, options) {
 
 	}
 }
-Object.assign(Charts.LineChart.prototype, Charts.ChartPrototype);
+Object.assign(JSGrof.LineChart.prototype, JSGrof.ChartPrototype);
 
-Charts.PieChart = function(canvasId, data, options) {
+JSGrof.PieChart = function(canvasId, data, options) {
 
 	this.type = 'piechart';
 
@@ -1243,8 +1261,8 @@ Charts.PieChart = function(canvasId, data, options) {
 	this._initCanvas(canvasId);
 	
 	// Data validation
-	if(typeof(data) !== 'object') {
-		this._errorMessage('piechart', 'data must be of type object.');
+	if(!data.constructor || data.constructor.name !== 'Object') {
+		this._errorMessage('piechart', 'data must be of type Object.');
 		return;
 	}
 	if(Object.keys(data).length === 0) {
@@ -1405,9 +1423,9 @@ Charts.PieChart = function(canvasId, data, options) {
 		}
 	}
 }
-Object.assign(Charts.PieChart.prototype, Charts.ChartPrototype);
+Object.assign(JSGrof.PieChart.prototype, JSGrof.ChartPrototype);
 
-Charts.BarChart = function(canvasId, data, options) {
+JSGrof.BarChart = function(canvasId, data, options) {
 
 	this.type = 'barchart';
 
@@ -1415,7 +1433,7 @@ Charts.BarChart = function(canvasId, data, options) {
 	this._initCanvas(canvasId);
 	
 	// Data validation
-	if(typeof(data) !== 'object') {
+	if(!data.constructor || data.constructor.name !== 'Object') {
 		this._errorMessage('barchart', 'data must be of type object.');
 		return;
 	}
@@ -1500,8 +1518,10 @@ Charts.BarChart = function(canvasId, data, options) {
 			
 			// Tick line
 			this.ctx.strokeStyle = this.axisColor;
+			this.ctx.beginPath();
 			this.ctx.moveTo(...this._chartCoords(barSpaceSize*0.5+barSize*0.5+barPlusSpaceSize*i, -0.02));
 			this.ctx.lineTo(...this._chartCoords(barSpaceSize*0.5+barSize*0.5+barPlusSpaceSize*i, 0));
+			this.ctx.closePath();
 			this.ctx.stroke();
 
 			// Tick text
@@ -1586,18 +1606,51 @@ Charts.BarChart = function(canvasId, data, options) {
 		this.draw();
 	}
 
+
 	this._mousemove = (x, y) => {
+		
+		this.draw();
+
+		if(this.dataLabels) return;
+
+		let barPlusSpaceSize = 1/Object.keys(this.data).length;
+		let barSize = 0.5*barPlusSpaceSize;
+		let barSpaceSize = barPlusSpaceSize-barSize;
+		let {
+			start: startY,
+			spacing: spacingY,
+			end: endY
+		} = this._dataToTicks(yMin, yMax);
+		if(this.min !== undefined) startY = this.min;
+		if(this.max !== undefined) endY = this.max;
+
+		for(let i = 0; i < Object.keys(this.data).length; i++) {
+			
+			if(x >= barSpaceSize*0.5+barPlusSpaceSize*i && x <= barSpaceSize*0.5+barSize+barPlusSpaceSize*i && y < (Object.values(this.data)[i] - startY) / (endY - startY)) {
+
+				this.ctx.fillStyle = this._getBWContrasting(this.dataColors[i % this.dataColors.length]);
+				this.ctx.fillText(
+					this._formatFloat(Object.values(this.finalData ?? this.data)[i]) + (this.tickSuffix ?? (this.tickSuffixY ?? '')),
+					...this._chartCoords(
+						barSpaceSize*0.5+barSize*0.5+barPlusSpaceSize*i, 
+						(Object.values(this.data)[i] - startY) / (endY - startY) - 0.05
+					)
+				);
+
+				break;
+			}
+		}
 
 	}
 }
-Object.assign(Charts.BarChart.prototype, Charts.ChartPrototype);
+Object.assign(JSGrof.BarChart.prototype, JSGrof.ChartPrototype);
 
-Charts.HistoChart = function(canvasId, data, options) {
+JSGrof.HistoChart = function(canvasId, data, options) {
     // Data validation
 
     // If data is not a list
-    if(Object.prototype.toString.call(data) !== '[object Array]') {
-        this._errorMessage('Histogram', 'Data must be a list of items');
+    if(!data.constructor || data.constructor.name !== 'Array') {
+        this._errorMessage('Histogram', 'Data must be an array of items');
         return;
     }
 
@@ -1620,6 +1673,6 @@ Charts.HistoChart = function(canvasId, data, options) {
     } 
 
     // Return a bar char of the buckets
-    return new Charts.BarChart(canvasId, buckets, options);
+    return new JSGrof.BarChart(canvasId, buckets, options);
 }
-Object.assign(Charts.HistoChart.prototype, Charts.ChartPrototype);
+Object.assign(JSGrof.HistoChart.prototype, JSGrof.ChartPrototype);
