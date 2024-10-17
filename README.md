@@ -17,7 +17,7 @@ Hér fyrir neðan er einfalt dæmi um hvernig hægt væri að birta súlurit me�
 Súluritin eru búin til með ```BarChart``` smiðnum sem tekur inn **id á canvas nóðu**, **gögn**, og nokkra **aukavalmöguleika**.
 
 ```javascript
-let chart = new Charts.BarChart(
+let chart = new JSGrof.BarChart(
 	'canvas-id',
 	{
 		'Eitt': 10,
