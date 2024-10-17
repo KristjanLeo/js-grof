@@ -36,7 +36,7 @@ let chart = new Charts.BarChart(
 Hér eru teknir fram aukavalmöguleikarnir ```title``` sem segir til um titil grafsins, ```min``` sem segir til um minnsta gildi á y-ás, ```labelY``` sem segir til um merkingu/breytu á y-ás, og ```resizeListener``` sem segir til um hvort það eigi að hlusta eftir ```resize``` atburðum á glugganum og skala/teikna grafið aftur eftir þörfum.
 
 # 4. Fleira
-Til eru ýmsar aðrar stillingar fyrir gröfin. T.d. er hægt að animate-a gröfin og gera Línuritin/punktaritin og súluritin gagnvirk á einfaldan hátt. En nánari skjölun kemur síðar.
+Til eru ýmsar aðrar stillingar fyrir gröfin. T.d. er hægt að animate-a gröfin og gera línuritin/punktaritin og súluritin gagnvirk á einfaldan hátt. En nánari skjölun kemur síðar.
 
 # 5. Nánari skjölun
 Hægt verður að skoða nánari skjölun inná vefsíðunni okkar sem verður sett upp innan skamms.
