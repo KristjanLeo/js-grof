@@ -39,4 +39,4 @@ Hér eru teknir fram aukavalmöguleikarnir ```title``` sem segir til um titil gr
 Til eru ýmsar aðrar stillingar fyrir gröfin. T.d. er hægt að animate-a gröfin og gera línuritin/punktaritin og súluritin gagnvirk á einfaldan hátt. En nánari skjölun kemur síðar.
 
 # 5. Nánari skjölun
-Hægt verður að skoða nánari skjölun inná vefsíðunni okkar sem verður sett upp innan skamms.
+Hægt verður að skoða nánari skjölun inná vefsíðunni okkar sem verður líklega sett upp innan skamms.
