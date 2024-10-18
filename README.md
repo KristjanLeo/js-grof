@@ -186,7 +186,7 @@ Mögulegar stillingar eru
 |floatFormat|String|Hvernig á að hafa formið á fleytitölum. Möguleikar eru ```','```(, fyrir framan aukastafina) ```',.'```((. fyrir framan aukastafina og , í þúsundaskiptingum)) ```'.,'```(, fyrir framan aukastafina og . í þúsundaskiptingum) og ```'.'```(. fyrir framan aukastafina) |
 
 
-## ```axisLabels``` stillingin
+## 6.4 ```axisLabels``` stillingin
 
 Með ```axisLabels``` stillingunni er hægt að birta sérsniðnar merkingar á x-ásnum. Það getur verið smá maus að fá stillinguna til að virka en hér dæmi:
 
