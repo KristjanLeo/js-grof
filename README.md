@@ -474,7 +474,7 @@ Með því að nota eftirfarandi stillingu er hægt að búa til gröf sem eru g
 interactive: true
 ```
 
-Hlustað er eftir ```mousemove``` atburðum á canvas nóðunni og brugðist við á mismunandi hátt eftir því hver tegund grafsins er.
+Hlustað er eftir ```mousemove``` atburðum á canvas nóðunni og brugðist við á mismunandi hátt eftir því hver tegund grafsins er (sjá hér fyrir neðan).
 
 ## 13.1 Línurit
 
