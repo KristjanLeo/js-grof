@@ -450,8 +450,6 @@ JSGrof.ChartPrototype = {
 		}
 
 		this.canvas = document.getElementById(canvasId);
-		
-		/* -------- Error handling -------- */
 		if(!this.canvas) {
 			this._errorMessage('_initCanvas', 'Missing element with id: "' + canvasId + '"');
 			return;
@@ -460,26 +458,23 @@ JSGrof.ChartPrototype = {
 			this._errorMessage('_initCanvas', 'Element with id "' + canvasId + '" is not a canvas');
 			return;
 		}
-		/* -------------------------------- */
 
-		if(this.canvas.getAttribute('width')) {
-			
+		if(this.canvas.getAttribute('width') !== null) {
 			if(isNaN(this.canvas.getAttribute('width'))) {
 				this.canvas.style.width = this.canvas.getAttribute('width');
 			} else {
 				this.canvas.style.width = this.canvas.getAttribute('width') + 'px';
 			}
-			this.canvas.width = null;
 		}
-
-		if(this.canvas.getAttribute('height')) {
+		this.canvas.width = null;
+		if(this.canvas.getAttribute('height') !== null) {
 			if(isNaN(this.canvas.getAttribute('height'))) {
 				this.canvas.style.height = this.canvas.getAttribute('height');
 			} else {
 				this.canvas.style.height = this.canvas.getAttribute('height') + 'px';
 			}
-			this.canvas.height = null;
 		}
+		this.canvas.height = null;
 
 		/* Initialize the context */
 		this.ctx = this.canvas.getContext('2d');
