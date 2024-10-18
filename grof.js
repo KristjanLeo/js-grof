@@ -493,6 +493,9 @@ JSGrof.ChartPrototype = {
 
 		if(this.interactive) {
 			this.canvas.onmousemove = (e) => {
+
+				if(this.error) return;
+
 				let [x, y] = this._inverseChartCoords(this.resolutionUpscale*e.offsetX, this.resolutionUpscale*e.offsetY);
 				if(x < 0 || x > 1 || y < 0 || y > 1) {
 					this.draw();
@@ -590,7 +593,7 @@ JSGrof.ChartPrototype = {
 			this.ctx.fillRect(
 				...this._canvasCoords(
 					0.9,
-					1 - 0.1 - this.fontSize*this.resolutionUpscale*2*i / this.canvas.height
+					1 - 0.14 - this.fontSize*this.resolutionUpscale*2*i / this.canvas.height
 				),
 				this.fontSize*this.resolutionUpscale, this.fontSize*this.resolutionUpscale
 			);
@@ -600,7 +603,7 @@ JSGrof.ChartPrototype = {
 			this.ctx.textBaseline = 'top';
 			let [x, y] = this._canvasCoords(
 				0.9,
-				1 - 0.1 - this.fontSize*this.resolutionUpscale*2*i / this.canvas.height
+				1 - 0.14 - this.fontSize*this.resolutionUpscale*2*i / this.canvas.height
 			);
 			this.ctx.fillText(
 				Object.keys(this.data)[i], 
@@ -792,6 +795,12 @@ JSGrof.ChartPrototype = {
 
 		// Already animating
 		if(this.animationPCT && this.animationPCT !== 1) return;
+
+		if(options === undefined) options = { duration: 1 };
+		if(!options.constructor || options.constructor.name !== 'Object') {
+			this._errorMessage('animate', 'options must be of type Object.');
+			return;
+		}
 
 		this.animationType = options.type;
 		if(this.animationType !== undefined && !this._checkString(this.animationType)) {
@@ -1206,9 +1215,11 @@ JSGrof.LineChart = function (canvasId, data, options) {
 			this.ctx.textAlign = 'center';
 			this.ctx.textBaseline = 'middle';
 			this.ctx.fillStyle = this.strokeColor;
+			this.ctx.font = this.fontSize*this.resolutionUpscale + 'px system-ui';
 			let txt;
 			if(this.axisLabels && parseInt(closest[0]) === closest[0]) {
-				txt = `${(this.axisLabels[parseInt(closest[0])])}; ${this._formatFloat((closest[1]).toFixed(this.interactivityPrecisionY)) + (this.tickSuffixY ?? '')}`;
+				let xValue = spacingX === 1 ? (this.axisLabels[parseInt(closest[0])]) : '?';
+				txt = `${xValue}; ${this._formatFloat((closest[1]).toFixed(this.interactivityPrecisionY)) + (this.tickSuffixY ?? '')}`;
 			} else {
 				txt = `${this._formatFloat((closest[0]).toFixed(this.interactivityPrecisionX)) + (this.tickSuffixX ?? '')}; ${this._formatFloat((closest[1]).toFixed(this.interactivityPrecisionY)) + (this.tickSuffixY ?? '')}`;
 			}
@@ -1675,4 +1686,3 @@ JSGrof.HistoChart = function(canvasId, data, options) {
     // Return a bar char of the buckets
     return new JSGrof.BarChart(canvasId, buckets, options);
 }
-Object.assign(JSGrof.HistoChart.prototype, JSGrof.ChartPrototype);
