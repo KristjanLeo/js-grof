@@ -165,7 +165,8 @@ Mögulegar stillingar eru
 |minX, maxX, minY, maxY|Number|Stillir lágmörk og hámörk á ásum grafsins.|
 |tickSpacingX, tickSpacingY|Number|Bil milli stika á ásum.|
 |fontSize|Number|Leturstærð grafsins þegar breidd þess er jöfn dynamicFontSizeCenter ef kveikt er á dynamicFontSize, annars föst leturstærð grafsins.|
-|dynamicFontSize|Boolean|Hvort leturstærðin eigi að ákvarðast af stærð grafsins þegar teiknað er (sjálfgefið true).|dynamicFontSizeCenter|Number|Hver á breidd grafsins að vera þegar leturstærðin er fontSize.|
+|dynamicFontSize|Boolean|Hvort leturstærðin eigi að ákvarðast af stærð grafsins þegar teiknað er (sjálfgefið true).|
+|dynamicFontSizeCenter|Number|Hver á breidd grafsins að vera þegar leturstærðin er fontSize.|
 |titleSize|Number|Margfaldast við leturstærðina til að mynda nýja leturstærð fyrir titils grafsins.|
 |chartPaddingLeft, chartPaddingRight, chartPaddingTop, chartPaddingBottom|Number|Gildi milli 0 og 1 sem segir til um hve mikið pláss verður utan við grafið á tiltekinni hlið.|
 |bgColor|String|Hex gildi með 6 tölustöfum (t.d. '#FFFFFF') sem segir til um bakgrunnslit grafsins. Sé þessi stiki null þá verður ekki teiknaður bakgrunnur.|
