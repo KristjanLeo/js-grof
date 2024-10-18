@@ -526,7 +526,7 @@ let skifuritInteractive = new PieChart(
 );
 ```
 
-## 13.3 Súlurit
+## 13.3 Súlu og stöplarit
 
 Þegar fært er bendilinn yfir súlurnar birtist gildi tilheyrandi súlu/hóps. Athugið að þetta mun aðeins virka ef ekki er þegar verið að sýna gildið. Hér er dæmi um graf sem er gagnvirkt:
 
