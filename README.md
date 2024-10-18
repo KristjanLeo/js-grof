@@ -372,3 +372,181 @@ Mögulegar stillingar eru
 |floatFormat|String|Hvernig á að hafa formið á fleytitölum. Möguleikar eru ```','```(, fyrir framan aukastafina) ```',.'```((. fyrir framan aukastafina og , í þúsundaskiptingum)) ```'.,'```(, fyrir framan aukastafina og . í þúsundaskiptingum) og ```'.'```(. fyrir framan aukastafina) |
 |dataLabels|Boolean|Hvort hafa eigi gildi hvers hóps með inná grafinu.|
 |innerLabels|Boolean|Hvort gildin eigi að vera innan eða utan súlnana.|
+
+
+# 9. Stöplarit
+Skjölun á stöplaritunum kemur síðar...
+
+
+# 10. Skalanleiki grafa
+Til eru nokkrar stillingar sem segja til um stærð hlutana á grafinu. Tvær þeirra hafa að gera með skalanleika.
+
+## 10.1 ```dynamicFontSize```
+Stillingin ```dynamicFontSize``` segir til um hvort að leturstærð grafsins eigi að skalast skv. vídd canvas nóðunar. Þegar leturstærðin er reiknuð er miðað við stillingarnar ```dynamicFontSizeCenter``` og ```fontSize```.
+
+```
+stærð = fontSize * (vídd / dynamicFontSizeCenter)
+```
+
+Þegar víddin er jöfn ```dynamicFontSizeCenter``` er stærðin jöfn ```fontSize```.
+
+Sjálfkrafa eru stikarnir:
+
+```javascript
+dynamicFontSize = true
+dynamicFontSizeCenter = 400
+fontSize = 10
+```
+
+## 10.2 ```resizeListener```
+
+Stillingin ```resizeListener``` er ekki kveikt sjálfkrafa en hægt er að kveikja á henni með
+
+```javascript
+resizeListener: true
+```
+
+Þegar hún er kveikt þá er hlustað eftir því hvort að lögun gluggans breytist og grafið teiknað aftur miðað við ný hlutföll og stærðir þegar það gerist.
+
+# 11. Animations (kvikun?)
+
+Hægt er að animate-a gröfin með því að kalla á ```animate``` fallið. Fallið tekur inn tvær stillingar, ```type``` og ```duration```. ```type``` segir til um tegund á animation og ```duration``` lengd hennar í sekúndum.
+
+```javascript
+chart.animate({ type: 'left-to-right', duration: 1 });
+```
+
+Hér fyrir neðan er dæmi um animation á línuriti þar sem ```animate``` fallið er notað. Þegar smellt er á grafið ætti það að animate-a. Athugið að ef animations virðast ekki virka gæti verið að "prefers-reduced-motion" sé stillt á "reduce".
+
+```javascript
+let linurit = new LineChart(
+	'linurit-animated',
+	{'f': Array.from(Array(11).keys()).map((i) => [i, i])}
+);
+
+linurit.canvas.onclick = (e) => {
+	linurit.animate({'duration': 1});
+};
+```
+
+Stundum vill maður ekki að grafið birtist fyrr en það er kallað á ```animate``` eða ```draw``` föllin en þá er hægt að stilla
+
+```javascript
+animated: true
+```
+
+í smiðnum. Einnig er hægt að búa til ný animation með því að kalla nokkrum sinnum á ```draw``` fallið og uppfæra gögnin með einhverju millibili.
+
+# 12 Fastar (```CHART_CONSTANTS```)
+
+Fyrirfram eru skilgreindir nokkrir fastar í ```CHART_CONSTANTS```. Þessa fasta er hægt að stilla og eiga þeir þá við öll gröfin sem teiknuð eru á síðunni eftir að þeim er breytt. T.d. ef breytt væri
+
+```javascript
+CHART_CONSTANTS.FONT_SIZE = 12;
+```
+
+Myndi það láta leturstærðina vera sjálfkrafa 12 fyrir öll gröf sem búin eru til með smiðunum eftir breytinguna. Hins vegar er hægt að eiga ennþá við stakt graf með því að nota stillinguna ```fontSize```.
+
+```javascript
+fontSize: 8
+```
+
+Hér fyrir neðan eru allir þeir fastar sem hægt er að stilla:
+
+| 	Fasti   	|	Tegund  	|		Áhrif			|
+|:----------------------|:----------------------|:--------------------------------------|
+|BG_COLOR|String|Hex strengur með sex tölustöfum sem segir til um bakgrunn grafana. Sjálfkrafa er gildið '#222222'.|
+|STROKE_COLOR|String|Hex strengur með sex tölustöfum sem segir til um línu liti grafana. Sjálfkrafa er gildið '#FFFFFF'.|
+|DATA_COLORS|Array|Fylki af hex strengjum með sex tölustöfum sem segja til um liti á gagnahópum grafana.|
+|CHART_PADDING_LEFT, CHART_PADDING_RIGHT, CHART_PADDING_TOP, CHART_PADDING_BOTTOM|Number|Gildi milli 0 og 1 sem segja til um hve mikið pláss verður utan við grafið á tiltekinni hlið. Sjálfkrafa er gildið 0,1.|
+|FONT_SIZE|Number|Gildi sem segir til um leturstærð grafana þegar breidd þeirra er jöfn dynamicFontSizeCenter ef kveikt er á dynamicFontSize, annars föst leturstærð þeirra. Sjálfkrafa 10.|
+|DYNAMIC_FONTSIZE_CENTER|Number|Hver á breidd grafsins að vera þegar leturstærðin er fontSize. Sjálfkrafa 400.|
+|RESOLUTION_UPSCALE|Number|Stiki sem segir til um hve mikið á að margfalda upplausn grafsins (í öðru veldi). Alls ekki hafa þennan stika of háan. Sjálfkrafa 2.|
+|TITLE_SIZE|Number|Margfaldast við leturstærðina til að mynda nýja leturstærð fyrir titil grafsins. Sjálfkrafa 2,5.|
+|LINE_WIDTH|Number|Þykkt lína grafsins. Sjálfkrafa 1.|
+|FLOAT_FORMAT|String|Hvernig á að hafa formið á fleytitölum. Möguleikar eru ```','```(, fyrir framan aukastafina) ```',.'```((. fyrir framan aukastafina og , í þúsundaskiptingum)) ```'.,'```(, fyrir framan aukastafina og . í þúsundaskiptingum) og ```'.'```(. fyrir framan aukastafina). Sjálfkrafa er gildið ```'.'```|
+
+# 13 Gagnvirkni
+
+Með því að nota eftirfarandi stillingu er hægt að búa til gröf sem eru gagnvirk.
+
+```javascript
+interactive: true
+```
+
+Hlustað er eftir ```mousemove``` atburðum á canvas nóðunni og brugðist við á mismunandi hátt eftir því hver tegund grafsins er.
+
+## 13.1 Línurit
+
+Þegar fært er bendilinn yfir línuritin sjást (x, y) gildin á þeim punkti sem er næstur bendlinum í x-stefnu í hverju falli. Þegar stikinn ```interactive``` er ```true``` þá er mikilvægt að taka einnig fram stikana ```interactivityPrecisionX``` og ```interactivityPrecisionY``` en þeir segja til um fjölda aukastafa í hvorri vídd þegar birt er gildi punktana á grafinu. Hér er dæmi um graf sem er gagnvirkt:
+
+```javascript
+let linurit = new LineChart(
+	'linurit-interactive',
+	{
+		'sin(x)': Array.from(Array(101).keys()).map((i) => [i/100 * 2, Math.sin(i*Math.PI*2/100)]),
+		'cos(x)': Array.from(Array(101).keys()).map((i) => [i/100 * 2, Math.cos(i*Math.PI*2/100)])
+	},
+	{
+		interactive: true,
+		interactivityPrecisionX: 2,
+		interactivityPrecisionY: 4,
+		resizeListener: true,
+		points: false,
+		areaUnder: true,
+		tickSuffixX: ' pi'
+	}
+);
+```
+
+## 13.2 Skífurit
+
+Þegar fært er bendilinn yfir skífuritin stækkar viðeigandi partur skífunar og hlutfall hans af heildinni birtist. Athugið að þetta mun aðeins virka ef ekki er þegar verið að sýna prósentuna. Þegar stikinn ```interactive``` er ```true``` þá er mikilvægt að taka einnig fram stikann ```interactivityPercentagePrecision``` en hann segir til um fjölda aukastafa þegar hlutfallið er birt. Hér er dæmi um graf sem er gagnvirkt:
+
+```javascript
+let skifuritInteractive = new PieChart(
+	'skifurit-interactive',
+	{
+		'Blár': 10,
+		'Hvítur': 10,
+		'Grár': 30
+	},
+	{
+		interactive: true,
+		interactivityPercentagePrecision: 0,
+		fontSize: 17,
+		legend: true,
+		dataColors: [
+			'#77AAFF',
+			'#FFFFFF',
+			'#777777'
+		],
+		resizeListener: true
+	}
+);
+```
+
+## 13.3 Súlurit
+
+Þegar fært er bendilinn yfir súlurnar birtist gildi tilheyrandi súlu/hóps. Athugið að þetta mun aðeins virka ef ekki er þegar verið að sýna gildið. Hér er dæmi um graf sem er gagnvirkt:
+
+```javascript
+let suluritInteractive = new BarChart(
+	'sulurit-interactive',
+	{
+		'Blár': 10,
+		'Hvítur': 10,
+		'Grár': 30
+	},
+	{
+		interactive: true,
+		dataColors: [
+			'#77AAFF',
+			'#FFFFFF',
+			'#777777'
+		],
+		resizeListener: true,
+		min: 0
+	}
+);
+```
