@@ -112,7 +112,10 @@ Línuritin geta birt bæði punkta og línur milli hnita. Ásarnir eru skalaðir
 ```javascript
 let linurit = new LineChart(
 	'linurit-canvas',
-	data,
+	{
+		'sin(x)': Array.from(Array(101).keys()).map((i) => [i/100 * Math.PI*2, Math.sin(i*Math.PI*2/100)]),
+		'cos(x)': Array.from(Array(101).keys()).map((i) => [i/100 * Math.PI*2, Math.cos(i*Math.PI*2/100)])
+	},
 	{
 		points: false,
 		legend: true,
@@ -224,3 +227,44 @@ let theLinechart = new LineChart(
 
 
 Athugið að hér ættu gögnin þá að hafa x-gildi milli 0 og 11. Í þessu tilfelli er t.d. fyrsti punkturinn með x-gildið 0 sem samsvarar Jan í axisLabels fylkinu. Til þess að fá punkt með x-gildi milli Jan og Feb væri hægt að nota x-gildið 0.5.
+
+# 7. Skífurit
+
+## 7.1. Dæmi
+
+```javascript
+let skifurit = new PieChart(
+	'skifurit-canvas',
+	{
+		'Bananar': 10,
+		'Epli': 30,
+		'Appelsínur': 25,
+		'Ananas': 20,
+		'Mangó': 30,
+		'Ferskjur': 15
+	},
+	{
+		title: 'Ávextir',
+		legend: true,
+		dataLabels: true,
+		innerLabels: true,
+		fontSize: 12,
+		chartPaddingLeft: 0,
+		chartPaddingBottom: 0.05,
+		resizeListener: true,
+		interactive: true,
+		interactivityPercentagePrecision: 2
+	}
+);
+```
+
+## 7.2. ```PieChart``` smiðurinn
+
+```PieChart```smiðurinn tekur inn 
+
+
+| Nafn breytu   |	Tegund  |	Lýsing			| Form	|
+|:--------------|:--------------|:------------------------------|:------|
+| ```id``` 	| String	| id á canvas nóðu	| ```'canvas-id'```	|
+| ```data```	| Object	| Gögn sem á að teikna skífurit af. | ```{'Hópur 1': x1, 'Hópur 2': x2, ...}``` |
+| ```options``` (valkvæmt) | Object	| Stillingar á grafinu. | ```{stilling1: ..., stilling2: ..., ...}``` |
