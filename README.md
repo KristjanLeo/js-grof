@@ -269,3 +269,33 @@ let skifurit = new PieChart(
 | ```id``` 	| String	| id á canvas nóðu	| ```'canvas-id'```	|
 | ```data```	| Object	| Gögn sem á að teikna skífurit af. | ```{'Hópur 1': x1, 'Hópur 2': x2, ...}``` |
 | ```options``` (valkvæmt) | Object	| Stillingar á grafinu. | ```{stilling1: ..., stilling2: ..., ...}``` |
+
+## 7.3 Mögulegar stillingar
+
+Mögulegar stillingar eru
+
+| 	Stilling   	|	Tegund  	|		Lýsing			|
+|:----------------------|:----------------------|:--------------------------------------|
+|title|String|Titill á grafinu|
+|legend|Boolean|Hvort hafa eigi með legend|
+|legendType|String|Hvaða tegund af legend. Möguleikar eru "topRight" (sjálfgefið) og "bottom"|
+|fontSize|Number|Leturstærð grafsins þegar breidd þess er jöfn dynamicFontSizeCenter ef kveikt er á dynamicFontSize, annars föst leturstærð grafsins.|
+|dynamicFontSize|Boolean|Hvort leturstærðin eigi að ákvarðast af stærð grafsins þegar teiknað er (sjálfgefið true).|
+|dynamicFontSizeCenter|Number|Hver á breidd grafsins að vera þegar leturstærðin er fontSize.|
+|titleSize|Number|Margfaldast við leturstærðina til að mynda nýja leturstærð fyrir titils grafsins.|
+|chartPaddingLeft, chartPaddingRight, chartPaddingTop, chartPaddingBottom|Number|Gildi milli 0 og 1 sem segir til um hve mikið pláss verður utan við grafið á tiltekinni hlið.|
+|bgColor|String|Hex gildi með 6 tölustöfum (t.d. '#FFFFFF') sem segir til um bakgrunnslit grafsins. Sé þessi stiki null þá verður ekki teiknaður bakgrunnur.|
+|dataColors|Array|Fylki með hex strengjum með 6 tölustöfum (t.d. '#FFFFFF') sem segir til um liti fallana á grafinu.|
+|strokeColor|String|Hex gildi með 6 tölustöfum (t.d. '#FFFFFF') sem segir til um liti strika grafinu.|
+|resolutionUpscale|Number|Stiki sem segir til um hve mikið á að margfalda upplausn grafsins (í öðru veldi). Alls ekki hafa þennan stika of háan.|
+|animated|Boolean|Hvort það eigi að animate-a grafið.|
+|lineWidth|Number|Gildi milli 0.01 og 100 sem segir til um þykkt lína grafsins|
+|resizeListener|Boolean|Segir til um hvort hlusta eigi eftir ```resize```atburðum á glugganum og bregðast við því með því að skala og teikna grafið aftur.|
+|interactive|Boolean|Hvort grafið eigi að vera gagnvirkt.|
+|interactivityPercentagePrecision|Number|Gildi milli 0 og 100 sem segir til um hve margir aukastafir eiga að vera með í prósentunni þegar gagnvirknin sýnir hana.|
+|floatFormat|String|Hvernig á að hafa formið á fleytitölum. Möguleikar eru ```','```(, fyrir framan aukastafina) ```',.'```((. fyrir framan aukastafina og , í þúsundaskiptingum)) ```'.,'```(, fyrir framan aukastafina og . í þúsundaskiptingum) og ```'.'```(. fyrir framan aukastafina) |
+|dataLabels|Boolean|Hvort hafa eigi gildi hvers hóps með inná grafinu.|
+|innerLabels|Boolean|Hvort gildin eigi að vera innan eða utan skífunar.|
+|percentage|Boolean|Hvort hafa eigi með hlutfall gildi hópsins af heildinni.|
+|percentagePrecision|Number|Gildi milli 0 og 100 sem segir til um hve margir aukastafir eiga að vera með í prósentunni.|
+
