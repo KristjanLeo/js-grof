@@ -11,10 +11,10 @@ JS Gröf er einfalt og þægilegt library til að búa til gröf með Javascript
 ## Munum að huga að aðgengnismálum. 
 JS Gröf er ekki útbúið sérstaklega fyrir aðgengilegar síður og því ekki ætlað fyrir slíkt.
 
-# 3. Síður sem nota JS Gröf
-Eins og er þá eru engar síður að nota JS Gröf sem við vitum um.
+# 3. Verkefni sem nota JS Gröf
+Eins og er þá eru engin verkefni sem nota JS Gröf sem við vitum um.
 
-*Ert þú að nota JS Gröf á síðunni þinni og vilt að hún birtist hér? Endilega láttu okkur vita!*
+*Ert þú að nota JS Gröf í verkefninu þínu og vilt að það birtist hér? Endilega láttu okkur vita!*
 
 # 4. Einfalt sýnidæmi
 Hér fyrir neðan er einfalt dæmi um hvernig hægt væri að birta súlurit með þremur súlum. 
