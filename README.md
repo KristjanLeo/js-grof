@@ -5,7 +5,7 @@ to this project.**
 
 
 # 1. Hvað er JS Gröf?
-JS Gröf er einfalt og þægilegt library til að búa til gröf á vefsíðum. Library-ið notar canvas nóðuna til þess að teikna **línurit**, **punktarit**, **skífurit**, **súlurit** og **tíðnirit**. Aðeins þarf að taka fram id á canvas nóðu úr HTML skjalinu og gögn sem birta á á grafinu ásamt einhverjum sniðugum aukastillingum sem library-ið leyfir. Hægt er að 'animate'-a gröfin og bíður library-ið uppá ýmsa valmöguleika hvað það varðar.
+JS Gröf er einfalt og þægilegt library til að búa til gröf með Javascript. Library-ið notar canvas nóðuna til þess að teikna **línurit**, **punktarit**, **skífurit**, **súlurit** og **tíðnirit**. Aðeins þarf að taka fram id á canvas nóðu úr HTML skjalinu og gögn sem birta á á grafinu ásamt einhverjum sniðugum aukastillingum sem library-ið leyfir. Hægt er að 'animate'-a gröfin og bíður library-ið uppá ýmsa valmöguleika hvað það varðar.
 
 # 2. Aðgengni (accessibility)
 ## Munum að huga að aðgengnismálum. 
