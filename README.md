@@ -39,6 +39,8 @@ let chart = new JSGrof.BarChart(
 
 Hér eru teknir fram aukavalmöguleikarnir ```title``` sem segir til um titil grafsins, ```min``` sem segir til um minnsta gildi á y-ás, ```labelY``` sem segir til um merkingu/breytu á y-ás, og ```resizeListener``` sem segir til um hvort það eigi að hlusta eftir ```resize``` atburðum á glugganum og skala/teikna grafið aftur eftir þörfum.
 
+<img width="300" alt="Súlurit með þremur súlum sem hafa nöfnin og gildin 'Eitt': 10, 'Tvö': 15 og 'Þrjú': 20. Súluritið hefur titilinn 'Súlurit', y-ásinn fer frá 0 og uppí 20 og er merktur sem 'y gildi'" src="https://github.com/user-attachments/assets/2865acf1-4167-453f-a8ec-771cc388a4c9">
+
 # 5. Hvernig er best að byrja?
 Einfaldast er að byrja með einföld HTML, CSS og Javascript skjöl (t.d. index.html, styles.css og main.js). Næst er að tengja skrárnar í HTML skjalinu. Í index.html er búin til canvas nóða með eitthvað id og henni gefin einhver breidd og hæð í styles.css. Í main.js er síðan náð í einhverja af smiðunum eða breytunum úr gröf.js, t.d. svona:
 
