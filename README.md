@@ -9,8 +9,7 @@ JS Gröf er einfalt og þægilegt lirbary til að búa til gröf á vefsíðum. 
 
 # 2. Aðgengni (accessibility)
 ## Munum að huga að aðgengnismálum. 
-Forðast ætti að nota JS Gröf á aðgengilegum (accessible) vefum og
-að minnsta kosti ætti að gera það sem notað er aðgengilegra með t.d. lýsingum, andstæðum litum, og fleiru.
+JS Gröf er ekki útbúið sérstaklega fyrir aðgengilegar síður og því ekki ætlað fyrir slíkt.
 
 # 3. Síður sem nota JS Gröf
 Eins og er þá eru engar síður að nota JS Gröf sem við vitum um.
