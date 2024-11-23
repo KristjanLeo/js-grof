@@ -97,22 +97,29 @@ let chart = new LineChart(
 	canvasId,
 	data,
 	{
-		title: 'Dæmi',
+		title: 'Línurit',
 		labelY: 'y ás',
 		labelX: 'x ás',
-		bgColor: '#222222',
-		dataColors: ['#FF9999'],
+		bgColor: '#F9F9F9',
+		strokeColor: '#000000',
+		dataColors: ['#0055FF'],
 		legend: true,
 		resizeListener: true,
+		interactive: true,
+		interactivityPrecisionX: 2,
+		interactivityPrecisionY: 1,
 		tickSuffixY: ' þús.',
+		floatFormat: '.,',
+		gridY: true,
+		fontSize: 9,
 		chartPaddingLeft: 0.2
 	}
 );
 ```
-<img width="300" alt="Línurit sem sýnir fallið f í data sem skilgreint var fyrir ofan. y ás fer frá 0 uppí 2,5 og er talinn í þúsundum. x ás fer frá 0 uppí 2. y ás hefur merkinguna 'y ás' og x ás merkinguna 'x ás'. Grafið hefur titilinn 'Dæmi'. Undir grafinu er legend þar sem sýnt er að fallið f sé teiknað með appelsínugulum lit." src="https://github.com/user-attachments/assets/b9ebe43d-2e35-4443-9ddd-9870aca6ec68">
 
+<img width="300" alt="Línurit sem sýnir fallið f í data sem skilgreint var fyrir ofan. y ás fer frá 0 uppí 2,5 og er talinn í þúsundum. x ás fer frá 0 uppí 2. y ás hefur merkinguna 'y ás' og x ás merkinguna 'x ás'. Grafið hefur titilinn 'Línurit'. Undir grafinu er legend þar sem sýnt er að fallið f sé teiknað með bláum lit. Stikur y áss eru framlengdar yfir grafið. Línuritið hefur bakgrunnslit sem er ljósgrár og línurnar eru svartar. Fleytitölur hafa punkt sem þúsundaskiptingu og kommu til að skilja milli heiltölu og brots." src="https://github.com/user-attachments/assets/528e4735-d79f-46d7-bdc8-fc075749b796">
 
-
+Athugið að hér er línuritið gert gagnvirkt með ```interactive``` stikanum og þá er hlustað eftir ```mousemove``` atburðum á ```canvas``` nóðunni og brugðist við þeim með því að sýna gildi viðeigandi punkta línuritsins.
 
 # 6. Nánari skjölun
 Nánari skjölun á **línuritum**, **súluritum**, **skífuritum**, **animations**, **gagnvirkni**, **föstum**, og **skalanleika** má sjá undir **Wiki** flipanum.
