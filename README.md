@@ -125,5 +125,31 @@ let chart = new LineChart(
 
 Athugið að hér er línuritið gert gagnvirkt með ```interactive``` stikanum og þá er hlustað eftir ```mousemove``` atburðum á ```canvas``` nóðunni og brugðist við þeim með því að sýna gildi viðeigandi punkta línuritsins.
 
-# 6. Nánari skjölun
+# 6. Annað sýnidæmi
+```javascript
+let linurit = new JSGrof.LineChart(
+	'canvas-id',
+	{
+		'sin(x)': Array.from(Array(101).keys()).map((i) => [i/100 * 2, Math.sin(i*Math.PI*2/100)]),
+		'cos(x)': Array.from(Array(101).keys()).map((i) => [i/100 * 2, Math.cos(i*Math.PI*2/100)])
+	},
+	{
+		points: false,
+		legend: true,
+		title: 'Hornaföll',
+		labelY: 'f(x)',
+		maxX: 2,
+		tickSuffixX: ' pí',
+		floatFormat: '.,',
+		grid: true,
+		fontSize: 8,
+		chartPaddingTop: 0.175
+	}
+);
+```
+
+<img width="300" alt="Myndin sýnir línurit af föllunum sin(x) og cos(x) á bilinu 0 uppí 2 pí. Aðeins eru teiknaðar línur milli punktana, ekki punktarnir sjálfir. Titill grafsins er 'Hornaföll'. Merking y áss er f(x). Neðst á grafinu er sýnt að sin(x) sé teiknað hvítt og cos(x) teiknað bleik-fjólublátt." src="https://github.com/user-attachments/assets/8742703a-a2c6-4261-93ab-ee7eb3c8a58e">
+
+
+# 7. Nánari skjölun
 Nánari skjölun á **línuritum**, **súluritum**, **skífuritum**, **animations**, **gagnvirkni**, **föstum**, og **skalanleika** má sjá undir **Wiki** flipanum.
