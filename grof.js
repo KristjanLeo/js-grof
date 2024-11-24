@@ -530,31 +530,36 @@ JSGrof.ChartPrototype = {
 
 	_dataToTicks(min, max) {
 		
-		let d = max - min;
+		let d = this._integerAddition(max, -min);
 		let fix = d < 1 ? -1 : 0;
 
 		let r = Math.round(d/Math.pow(10, parseInt(Math.log10(d)) + fix));
-		let l = Math.pow(10, parseInt(Math.log10(d)) + fix);
+
+		let ll = this._integerAddition(parseInt(Math.log10(d)), fix)
+		let l = 10**ll;
+		if(ll < 0) {
+			l = parseFloat(l.toFixed(Math.abs(ll)));
+		}
 
 		let spacing;
 		if(r > 9) {
-			spacing = 2 * l;
+			spacing = this._integerMultiplication(2, l);
 		} else if(r > 8) {
-			spacing = 1.5 * l;
+			spacing = this._integerMultiplication(1.5, l);
 		} else if (r > 4) {
-			spacing = 1.0 * l;
+			spacing = this._integerMultiplication(1.0, l)
 		} else if (r > 2) {
-			spacing = 0.5 * l;
+			spacing = this._integerMultiplication(0.5, l)
 		} else if (r > 1) {
-			spacing = 0.25 * l;
+			spacing = this._integerMultiplication(0.25, l)
 		} else {
-			spacing = 0.125 * l;
+			spacing = this._integerMultiplication(0.125, l)
 		}
 
-		let start = min - min % spacing;
+		let start = this._integerAddition(min, -this._integerModulo(min, spacing));
 		if(start > min) start = this._integerAddition(start, -spacing);
 
-		let end = max - max % spacing;
+		let end = this._integerAddition(max, -this._integerModulo(max, spacing));
 		if(end < max) end = this._integerAddition(end, spacing) + 1e-16;
 
 		return {start, spacing, end};
@@ -838,32 +843,28 @@ JSGrof.ChartPrototype = {
 		let splitA = a.toString().split('.');
 		let splitB = b.toString().split('.');
 
-		if(splitA.length < 2 && splitB.length < 2) {
-			return a + b;
-		}
-
-		if(splitA.length < 2) {
-			return (a*Math.pow(10, splitB[1].length) + b*Math.pow(10, splitB[1].length))/Math.pow(10, splitB[1].length);
-		}
-
-		if(splitB.length < 2) {
-			return (a*Math.pow(10, splitA[1].length) + b*Math.pow(10, splitA[1].length))/Math.pow(10, splitA[1].length);
-		}
+		if(splitA.length < 2 && splitB.length < 2) return a + b;
+		if(splitA.length < 2) return parseFloat((a+b).toFixed(splitB[1].length));
+		if(splitB.length < 2) return parseFloat((a+b).toFixed(splitA[1].length));
 
 		let maxPrecision = splitA[1].length > splitB[1].length ? splitA[1].length : splitB[1].length;
-
-		return (a*Math.pow(10, maxPrecision) + b*Math.pow(10, maxPrecision))/Math.pow(10, maxPrecision);
+		return parseFloat((a+b).toFixed(maxPrecision));
 	},
 
-	_integerMultiplication(intA, floatB) {
+	_integerMultiplication(a, b) {
 		
-		let splitB = floatB.toString().split('.');
+		let splitA = a.toString().split('.');
+		let splitB = b.toString().split('.');
 		
-		if(splitB.length < 2) {
-			return intA*floatB;
-		}
+		if(splitA.length < 2 && splitB.length < 2) return a*b;
+		if(splitA.length < 2) return parseFloat((a*b).toFixed(splitB[1].length));
+		if(splitB.length < 2) return parseFloat((a*b).toFixed(splitA[1].length));
 
-		return (intA*Math.pow(10, splitB[1].length)*floatB)/Math.pow(10, splitB[1].length);
+		return parseFloat((a*b).toFixed(splitA[1].length+splitB[1].length));
+	},
+
+	_integerModulo(a, b) {
+		return this._integerAddition(a, -this._integerMultiplication(parseInt(a/b), b));
 	},
 
 	_formatFloat(num) {
