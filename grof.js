@@ -476,7 +476,6 @@ JSGrof.ChartPrototype = {
 		}
 		this.canvas.height = null;
 
-		/* Initialize the context */
 		this.ctx = this.canvas.getContext('2d');
 
 		this.resize();
@@ -573,7 +572,7 @@ JSGrof.ChartPrototype = {
 		}
 
 		if(this.dynamicFontSize) {
-        	this.fontSize = this.fontSizeConstant*this.canvas.clientWidth / this.dynamicFontSizeCenter;
+        	this.fontSize = this.fontSizeConstant*Math.min(this.canvas.clientWidth, this.canvas.clientHeight) / this.dynamicFontSizeCenter;
         }
 
 		this.canvas.width = this.canvas.clientWidth*this.resolutionUpscale;
@@ -904,6 +903,14 @@ JSGrof.ChartPrototype = {
 		}
 
 		return num;
+	},
+
+	_withOpacity(color, opacity) {
+		this.v = color.split('').splice(1);
+		this.r = this._getBase10Value(this.v[0]+this.v[1]);
+		this.g = this._getBase10Value(this.v[2]+this.v[3]);
+		this.b = this._getBase10Value(this.v[4]+this.v[5]);
+		return `rgba(${this.r},${this.g},${this.b},${opacity})`;
 	}
 }
 
@@ -978,14 +985,18 @@ JSGrof.LineChart = function (canvasId, data, options) {
 		/* y axis */
 		this.ctx.lineWidth = this.resolutionUpscale*this.lineWidth;
 		this.ctx.strokeStyle = this.axisColor;
+		this.ctx.beginPath();
 		this.ctx.moveTo(...this._chartCoords(0, 0));
 		this.ctx.lineTo(...this._chartCoords(0, 1));
+		this.ctx.closePath();
 		this.ctx.stroke();
 
 		/* x axis */
 		this.ctx.strokeStyle = this.axisColor;
+		this.ctx.beginPath();
 		this.ctx.moveTo(...this._chartCoords(0, 0));
 		this.ctx.lineTo(...this._chartCoords(1, 0));
+		this.ctx.closePath();
 		this.ctx.stroke();
 
 		/* y and x ticks */
@@ -1015,9 +1026,22 @@ JSGrof.LineChart = function (canvasId, data, options) {
 		for(let i = 0; i < endIdxY; i++) {
 			
 			// Line
+			this.ctx.beginPath();
 			this.ctx.moveTo(...this._chartCoords(-0.02, tickSpacingY*i));
-			this.ctx.lineTo(...this._chartCoords(this.grid || this.gridY ? 1.0 : 0.02, tickSpacingY*i));
+			this.ctx.lineTo(...this._chartCoords(0, tickSpacingY*i));
+			this.ctx.closePath();
 			this.ctx.stroke();
+
+			if(this.grid || this.gridY) {
+				this.ctx.strokeStyle = this._withOpacity(this.strokeColor, 0.3);
+				this.ctx.beginPath();
+				this.ctx.moveTo(...this._chartCoords(0, tickSpacingY*i));
+				this.ctx.lineTo(...this._chartCoords(1.0, tickSpacingY*i));
+				this.ctx.closePath();
+				this.ctx.stroke();
+				this.ctx.strokeStyle = this.strokeColor;
+			}
+			
 
 			// Text
 			this.ctx.fillStyle = this.strokeColor;
@@ -1044,9 +1068,23 @@ JSGrof.LineChart = function (canvasId, data, options) {
 		for(let i = 0; i < endIdxX; i++) {
 			
 			// Line
+			this.ctx.beginPath();
 			this.ctx.moveTo(...this._chartCoords(tickSpacingX*i, -0.02));
-			this.ctx.lineTo(...this._chartCoords(tickSpacingX*i, this.grid || this.gridX ? 1.0 : 0.02));
+			this.ctx.lineTo(...this._chartCoords(tickSpacingX*i, 0));
+			this.ctx.closePath();
 			this.ctx.stroke();
+
+
+			if(this.grid || this.gridX) {
+				this.ctx.strokeStyle = this._withOpacity(this.strokeColor, 0.3);
+				this.ctx.beginPath();
+				this.ctx.moveTo(...this._chartCoords(tickSpacingX*i, 0));
+				this.ctx.lineTo(...this._chartCoords(tickSpacingX*i, 1.0));
+				this.ctx.closePath();
+				this.ctx.stroke();
+				this.ctx.strokeStyle = this.strokeColor;
+			}
+
 
 			// Text
 			this.ctx.fillStyle = this.strokeColor;
@@ -1122,12 +1160,10 @@ JSGrof.LineChart = function (canvasId, data, options) {
 					this.ctx.lineTo(...this._chartCoords((points[points.length-1][0] - startX) / (endX - startX), 0));
 					this.ctx.lineTo(...this._chartCoords((points[0][0] - startX) / (endX - startX), 0));
 					this.ctx.closePath();
-					this.v = this.ctx.strokeStyle.split('').splice(1);
-					this.r = this._getBase10Value(this.v[0]+this.v[1]);
-					this.g = this._getBase10Value(this.v[2]+this.v[3]);
-					this.b = this._getBase10Value(this.v[4]+this.v[5]);
-					this.ctx.fillStyle = `rgba(${this.r},${this.g},${this.b},0.1)`;
+					this.ctx.fillStyle = this._withOpacity(this.dataColors[i % this.dataColors.length], 0.1);
 					this.ctx.fill();
+				} else {
+					this.ctx.closePath();
 				}
 			}
 		});
@@ -1501,9 +1537,21 @@ JSGrof.BarChart = function(canvasId, data, options) {
 			
 			// Line
 			this.ctx.strokeStyle = this.axisColor;
+			this.ctx.beginPath();
 			this.ctx.moveTo(...this._chartCoords(-0.02, tickSpacingY*i));
-			this.ctx.lineTo(...this._chartCoords(this.grid || this.gridY ? 1.0 : 0.02, tickSpacingY*i));
+			this.ctx.lineTo(...this._chartCoords(0, tickSpacingY*i));
+			this.ctx.closePath();
 			this.ctx.stroke();
+
+			if(this.grid || this.gridY) {
+				this.ctx.strokeStyle = this._withOpacity(this.strokeColor, 0.3);
+				this.ctx.beginPath();
+				this.ctx.moveTo(...this._chartCoords(0, tickSpacingY*i));
+				this.ctx.lineTo(...this._chartCoords(1.0, tickSpacingY*i));
+				this.ctx.closePath();
+				this.ctx.stroke();
+				this.ctx.strokeStyle = this.axisColor;
+			}
 
 			// Text
 			this.ctx.fillStyle = this.strokeColor;
