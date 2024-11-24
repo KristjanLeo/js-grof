@@ -39,7 +39,8 @@ let chart = new JSGrof.BarChart(
 
 Hér eru teknir fram aukavalmöguleikarnir ```title``` sem segir til um titil grafsins, ```min``` sem segir til um minnsta gildi á y-ás, ```labelY``` sem segir til um merkingu/breytu á y-ás, og ```resizeListener``` sem segir til um hvort það eigi að hlusta eftir ```resize``` atburðum á glugganum og skala/teikna grafið aftur eftir þörfum.
 
-<img width="300" alt="Súlurit með þremur súlum sem hafa nöfnin og gildin 'Eitt': 10, 'Tvö': 15 og 'Þrjú': 20. Súluritið hefur titilinn 'Súlurit', y ásinn fer frá 0 og uppí 20 og er merktur sem 'y gildi'" src="https://github.com/user-attachments/assets/2865acf1-4167-453f-a8ec-771cc388a4c9">
+<img width="300" alt="Súlurit með þremur súlum sem hafa nöfnin og gildin 'Eitt': 10, 'Tvö': 15 og 'Þrjú': 20. Súluritið hefur titilinn 'Súlurit', y ásinn fer frá 0 og uppí 20 og er merktur sem 'y gildi'" src="https://github.com/user-attachments/assets/857636d6-964f-46d6-a26f-94d2fd71797a">
+
 
 # 5. Hvernig er best að byrja?
 Einfaldast er að byrja með einföld HTML, CSS og Javascript skjöl (t.d. index.html, styles.css og main.js). Næst er að tengja skrárnar í HTML skjalinu. Í index.html er búin til canvas nóða með eitthvað id og henni gefin einhver breidd og hæð í styles.css. Í main.js er síðan náð í einhverja af smiðunum eða breytunum úr gröf.js, t.d. svona:
@@ -84,8 +85,8 @@ let chart = new LineChart(
 	data
 );
 ```
-<img width="300" alt="Línurit sem sýnir fallið f í data sem skilgreint var fyrir ofan. y ás fer frá 0 uppí 2,5. x ás fer frá 0 og uppí 2." src="https://github.com/user-attachments/assets/b0c80e54-cb6c-4452-9e7f-2fc88a7340f0">
 
+<img width="300" alt="Línurit sem sýnir fallið f í data sem skilgreint var fyrir ofan. y ás fer frá 0 uppí 2,5. x ás fer frá 0 og uppí 2." src="https://github.com/user-attachments/assets/383a23e5-23af-407f-ba2a-422391b51ade">
 
 
 Eins og er þá er þetta kannski ekki svo spennandi graf en við getum breytt því með því að taka fram einhverjar stillingar, t.d. svona:
@@ -118,7 +119,8 @@ let chart = new LineChart(
 );
 ```
 
-<img width="300" alt="Línurit sem sýnir fallið f í data sem skilgreint var fyrir ofan. y ás fer frá 0 uppí 2,5 og er talinn í þúsundum. x ás fer frá 0 uppí 2. y ás hefur merkinguna 'y ás' og x ás merkinguna 'x ás'. Grafið hefur titilinn 'Línurit (dæmi)'. Undir grafinu er legend þar sem sýnt er að fallið f sé teiknað með bláum lit. Einnig er svæðið undir f ljósblátt. Stikur y áss eru framlengdar yfir grafið. Línuritið hefur bakgrunnslit sem er ljósgrár og línurnar eru svartar. Fleytitölur hafa punkt sem þúsundaskiptingu og kommu til að skilja milli heiltölu og brots." src="https://github.com/user-attachments/assets/2588a70a-0458-4fa0-ae66-c3364cf18209">
+<img width="300" alt="Línurit sem sýnir fallið f í data sem skilgreint var fyrir ofan. y ás fer frá 0 uppí 2,5 og er talinn í þúsundum. x ás fer frá 0 uppí 2. y ás hefur merkinguna 'y ás' og x ás merkinguna 'x ás'. Grafið hefur titilinn 'Línurit (dæmi)'. Undir grafinu er legend þar sem sýnt er að fallið f sé teiknað með bláum lit. Einnig er svæðið undir f ljósblátt. Stikur y áss eru framlengdar yfir grafið. Línuritið hefur bakgrunnslit sem er ljósgrár og línurnar eru svartar. Fleytitölur hafa punkt sem þúsundaskiptingu og kommu til að skilja milli heiltölu og brots." src="https://github.com/user-attachments/assets/770c5a99-81f2-43d9-a080-a40942379048">
+
 
 
 Athugið að hér er línuritið gert gagnvirkt með ```interactive``` stikanum og þá er hlustað eftir ```mousemove``` atburðum á ```canvas``` nóðunni og brugðist við þeim með því að sýna gildi viðeigandi punkta línuritsins.
