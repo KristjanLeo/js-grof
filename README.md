@@ -37,25 +37,21 @@ let chart = new JSGrof.BarChart(
 );
 ```
 
-Hér eru teknir fram aukavalmöguleikarnir ```title``` sem segir til um titil grafsins, ```min``` sem segir til um minnsta gildi á y-ás, ```labelY``` sem segir til um merkingu/breytu á y-ás, og ```resizeListener``` sem segir til um hvort það eigi að hlusta eftir ```resize``` atburðum á glugganum og skala/teikna grafið aftur eftir þörfum.
+Hér eru teknir fram aukavalmöguleikarnir ```title``` sem segir til um titil grafsins, ```min``` sem segir til um minnsta gildi á y-ás, ```labelY``` sem segir til um merkingu/breytu á y-ás, og ```resizeListener``` sem segir til um hvort það eigi að hlusta eftir ```resize``` atburðum á glugganum og skala/teikna grafið aftur eftir þörfum. Athugið einnig að orðið ```JSGrof``` er notað í gröf.js og því þarf að passa að nota það ekki í annað.
 
 <img width="300" alt="Súlurit með þremur súlum sem hafa nöfnin og gildin 'Eitt': 10, 'Tvö': 15 og 'Þrjú': 20. Súluritið hefur titilinn 'Súlurit', y ásinn fer frá 0 og uppí 20 og er merktur sem 'y gildi'" src="https://github.com/user-attachments/assets/857636d6-964f-46d6-a26f-94d2fd71797a">
 
 
+
 # 5. Hvernig er best að byrja?
-Einfaldast er að byrja með einföld HTML, CSS og Javascript skjöl (t.d. index.html, styles.css og main.js). Næst er að tengja skrárnar í HTML skjalinu. Í index.html er búin til canvas nóða með eitthvað id og henni gefin einhver breidd og hæð í styles.css. Í main.js er síðan náð í einhverja af smiðunum eða breytunum úr gröf.js, t.d. svona:
 
-```javascript
-const {
-	LineChart,
-	BarChart,
-	PieChart,
-	HistoChart,
-	CHART_CONSTANTS
-} = JSGrof;
-```
+---
 
-Athugið að orðið ```JSGrof``` er hér frátekið í gröf.js og því þarf að passa að nota það ekki í annað. Þegar búið er að sækja smiðinn er einfalt að byrja að nota hann en fyrst þurfum við að útbúa einhver gögn. ```LineChart``` smiðurinn tekur við gögnum á forminu:
+Gott er að byrja með einföld HTML og Javascript skjöl, t.d. index.html og main.js. Næst er að tengja main.js og grof.js í index.html. Í index.html er síðan búin til canvas nóða með eitthvað id (í þessu dæmi 'canvas-id'). Mikilvægt er að canvas nóðan hafi einhverja breidd og hæð til þess að hún birtist.
+
+---
+
+Áður en við birtum graf á canvas nóðunni þurfum við fyrst að útbúa einhver gögn. ```LineChart``` smiðurinn tekur við gögnum á forminu:
 
 ```javascript
 {
@@ -65,23 +61,19 @@ Athugið að orðið ```JSGrof``` er hér frátekið í gröf.js og því þarf 
 }
 ```
 
-Við getum t.d. notað:
+Í main.js getum við t.d. byrjað með
 
 ```javascript
 let data = {
-	'f': [
-		[ 0, 0 ],
-		[ 1, 1.5 ],
-		[ 2, 2.5 ]
-	]
+	'f': [[0, 0],[1, 1.5],[2, 2.5]]
 };
 ```
 
-Að lokum er kallað á smiðinn. Án þess að taka fram neinar aukastillingar væri það gert svona:
+og svo kallað á ```LineChart``` smiðinn. Án þess að taka fram neinar aukastillingar væri það gert svona:
 
 ```javascript
-let chart = new LineChart(
-	canvasId,
+let chart = new JSGrof.LineChart(
+	'canvas-id',
 	data
 );
 ```
@@ -94,8 +86,8 @@ Eins og er þá er þetta kannski ekki svo spennandi graf en við getum breytt �
 
 
 ```javascript
-let chart = new LineChart(
-	canvasId,
+let chart = new JSGrof.LineChart(
+	'canvas-id',
 	data,
 	{
 		title: 'Línurit (dæmi)',
@@ -121,9 +113,8 @@ let chart = new LineChart(
 
 <img width="300" alt="Línurit sem sýnir fallið f í data sem skilgreint var fyrir ofan. y ás fer frá 0 uppí 2,5 og er talinn í þúsundum. x ás fer frá 0 uppí 2. y ás hefur merkinguna 'y ás' og x ás merkinguna 'x ás'. Grafið hefur titilinn 'Línurit (dæmi)'. Undir grafinu er legend þar sem sýnt er að fallið f sé teiknað með bláum lit. Einnig er svæðið undir f ljósblátt. Stikur y áss eru framlengdar yfir grafið. Línuritið hefur bakgrunnslit sem er ljósgrár og línurnar eru svartar. Fleytitölur hafa punkt sem þúsundaskiptingu og kommu til að skilja milli heiltölu og brots." src="https://github.com/user-attachments/assets/770c5a99-81f2-43d9-a080-a40942379048">
 
-
-
 Athugið að hér er línuritið gert gagnvirkt með ```interactive``` stikanum og þá er hlustað eftir ```mousemove``` atburðum á ```canvas``` nóðunni og brugðist við þeim með því að sýna gildi viðeigandi punkta línuritsins.
+
 
 # 6. Annað sýnidæmi
 ```javascript
@@ -149,6 +140,8 @@ let linurit = new JSGrof.LineChart(
 ```
 
 <img width="300" alt="Myndin sýnir línurit af föllunum sin(x) og cos(x) á bilinu 0 uppí 2 pí. Aðeins eru teiknaðar línur milli punktana, ekki punktarnir sjálfir. Titill grafsins er 'Hornaföll'. Merking y áss er f(x). Neðst á grafinu er sýnt að sin(x) sé teiknað hvítt og cos(x) teiknað bleik-fjólublátt." src="https://github.com/user-attachments/assets/8742703a-a2c6-4261-93ab-ee7eb3c8a58e">
+
+
 
 
 # 7. Nánari skjölun
