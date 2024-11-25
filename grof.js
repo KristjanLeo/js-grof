@@ -1683,6 +1683,7 @@ JSGrof.BarChart = function(canvasId, data, options) {
 			
 			if(x >= barSpaceSize*0.5+barPlusSpaceSize*i && x <= barSpaceSize*0.5+barSize+barPlusSpaceSize*i && y < (Object.values(this.data)[i] - startY) / (endY - startY)) {
 
+				this.ctx.font = this.fontSize*this.resolutionUpscale + 'px system-ui';
 				this.ctx.fillStyle = this._getBWContrasting(this.dataColors[i % this.dataColors.length]);
 				this.ctx.fillText(
 					this._formatFloat(Object.values(this.finalData ?? this.data)[i]) + (this.tickSuffix ?? (this.tickSuffixY ?? '')),
