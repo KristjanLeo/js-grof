@@ -324,11 +324,20 @@ JSGrof.ChartPrototype = {
 			this._errorMessage('_initOptions', 'minX must be a number between -Infinity and Infinity.');
 			return;
 		}
+		if(this.minX === undefined && this.type === 'histochart') {
+			this._errorMessage('_initOptions', 'missing minX.');
+			return;
+		}
 		this.maxX = options.maxX;
 		if(this.maxX !== undefined && !this._checkFloat(this.maxX, -Infinity, Infinity)) {
 			this._errorMessage('_initOptions', 'maxX must be a number between -Infinity and Infinity.');
 			return;
 		}
+		if(this.maxX === undefined && this.type === 'histochart') {
+			this._errorMessage('_initOptions', 'missing maxX.');
+			return;
+		}
+
 		this.minY = options.minY;
 		if(this.minY !== undefined && !this._checkFloat(this.minY, -Infinity, Infinity)) {
 			this._errorMessage('_initOptions', 'minY must be a number between -Infinity and Infinity.');
@@ -389,13 +398,6 @@ JSGrof.ChartPrototype = {
 		this.floatFormat = options.floatFormat ?? JSGrof.CHART_CONSTANTS.FLOAT_FORMAT;
 		if(this.floatFormat !== undefined && !this._checkString(this.floatFormat)) {
 			this._errorMessage('_initOptions', 'floatFormat must be a string.');
-			return;
-		}
-
-		// Histochart bucket size
-		this.bucketSize = options.bucketSize;
-		if(!this._checkFloat(this.bucketSize, -Infinity, Infinity) && this.type === 'histochart') {
-			this._errorMessage('_initOptions', 'bucketSize must be a number.');
 			return;
 		}
 
@@ -1722,9 +1724,11 @@ JSGrof.BarChart = function(canvasId, data, options) {
 Object.assign(JSGrof.BarChart.prototype, JSGrof.ChartPrototype);
 
 JSGrof.HistoChart = function(canvasId, data, options) {
-    // Data validation
 
     this.type = 'histochart';
+
+    this._initOptions(options === undefined ? {} : options);
+	this._initCanvas(canvasId);
 
     // If data is not a list
     if(!data.constructor || data.constructor.name !== 'Array') {
@@ -1734,8 +1738,8 @@ JSGrof.HistoChart = function(canvasId, data, options) {
 
     // If list items are not numbers
     for(let i = 0; i < data.length; i++) {
-    	if(!this._checkFloat(data[i], -Infinity, Infinity)) {
-    		 this._errorMessage('Histochart', 'All items in data must be numbers.');
+    	if(!this._checkFloat(data[i], 0, Infinity)) {
+    		 this._errorMessage('Histochart', 'All items in data must be positive numbers.');
         	return;
     	}
     }
@@ -1746,55 +1750,18 @@ JSGrof.HistoChart = function(canvasId, data, options) {
         return;
     }
 
-    this._initOptions(options === undefined ? {} : options);
-	this._initCanvas(canvasId);
-
 	this.data = data;
 
 
 	this._drawSelf = () => {
 
 
-	    let minX = Infinity;
-		let maxX = -Infinity;
-		this.data.forEach((val) => {
-			if(val < minX) minX = val;
-			if(val > maxX) maxX = val;
-		})
-		if(this.minX !== undefined) minX = this.minX;
-		if(this.maxX !== undefined) maxX = this.maxX;
-
-
-		if(parseInt((maxX - minX) / this.bucketSize)*this.bucketSize !== this._integerAddition(maxX, -minX)) {
-			this._errorMessage('Histochart', 'bucketSize does not fit min and max x values');
-	        return;
-		}
-
-		// Group data into buckets and count them
-	    let buckets = Array(parseInt((maxX - minX) / this.bucketSize)+1).fill(0);
-	    let totalCnt = 0;
-	    for(let i = 0; i < this.data.length; i++) {
-	    	if(this.data[i] > maxX) continue;
-	        buckets[parseInt((this.data[i] - minX) / this.bucketSize)]++;
-	        totalCnt++;
-	    }
-
-	    if(this.includeMaxValueInLastBar) {
-	    	buckets[buckets.length-2] += buckets[buckets.length-1];
-	    }
-
-	    if(this.portion) {
-	    	if(this.includeMaxValueInLastBar) {
-	    		buckets = buckets.map((i) => 100*i/totalCnt);
-	    	} else {
-	    		buckets = buckets.map((i) => 100*i/(totalCnt - buckets[buckets.length-1]));
-	    	}
-	    	this.tickSuffixY = ' %';
-	    }
+		let minX = this.minX;
+		let maxX = this.maxX;
 
 	    let minY = Infinity;
 		let maxY = -Infinity;
-		buckets.slice(0, buckets.length-1).forEach((val) => {
+		data.forEach((val) => {
 			if(val < minY) minY = val;
 			if(val > maxY) maxY = val;
 		})
@@ -1906,14 +1873,14 @@ JSGrof.HistoChart = function(canvasId, data, options) {
 		}
 
 		// Bars
-		let barSize = 1/(buckets.length-1);
-		for(let i = 0; i < buckets.length-1; i++) {
+		let barSize = 1/data.length;
+		for(let i = 0; i < data.length; i++) {
 
 			// draw bucket
 			let [barXMin, barYMin] = this._chartCoords(barSize*i, 0);
 			let [barXMax, barYMax] = this._chartCoords(
 				barSize*(i+1),
-				(buckets[i] - startY) / (endY - startY)
+				(data[i] - startY) / (endY - startY)
 			);
 			this.ctx.fillStyle = this.dataColors[0];
 			this.ctx.fillRect(
@@ -1930,22 +1897,7 @@ JSGrof.HistoChart = function(canvasId, data, options) {
 	if(!this.animated) {this.draw(); this.draw();}
 
 	this._animateSelf = () => {
-		
-		if(this.animationPCT == 1) {
-			this.data = this.finalData;
-			return;
-		}
 
-		let newData = [];
-		switch(this.animationType) {
-
-			default: // 'left-to-right'
-
-				newData = this.finalData.slice(0, parseInt(this.finalData.length*this.animationPCT));
-				break;
-		}
-		this.data = newData;
-		this.draw();
 	}
 
 	this._mousemove = (x, y) => {
