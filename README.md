@@ -116,7 +116,9 @@ let chart = new JSGrof.LineChart(
 Athugið að hér er línuritið gert gagnvirkt með ```interactive``` stikanum og þá er hlustað eftir ```mousemove``` atburðum á ```canvas``` nóðunni og brugðist við þeim með því að sýna gildi viðeigandi punkta línuritsins.
 
 
-# 6. Annað sýnidæmi
+# 6. Önnur sýnidæmi
+
+## Hornaföll
 ```javascript
 let linurit = new JSGrof.LineChart(
 	'canvas-id',
@@ -141,6 +143,29 @@ let linurit = new JSGrof.LineChart(
 
 <img width="300" alt="Myndin sýnir línurit af föllunum sin(x) og cos(x) á bilinu 0 uppí 2 pí. Aðeins eru teiknaðar línur milli punktana, ekki punktarnir sjálfir. Titill grafsins er 'Hornaföll'. Merking y áss er f(x). Neðst á grafinu er sýnt að sin(x) sé teiknað hvítt og cos(x) teiknað bleik-fjólublátt." src="https://github.com/user-attachments/assets/8742703a-a2c6-4261-93ab-ee7eb3c8a58e">
 
+
+## Normaldreifing
+```javascript
+let avg = 0.75;
+let std = 0.1;
+let histogram = new JSGrof.HistoChart(
+	'canvas-id',
+	Array.from(Array(101).keys()).map((x) => 1/(std*Math.sqrt(2*Math.PI)*Math.exp(0.5*((x/100 - avg)/(std))**2))),
+	{
+		minX: 0,
+		maxX: 1,
+		minY: 0,
+		tickSuffixY: ' %',
+		grid: true,
+		dataColors: ['#66BBFF'],
+		chartPaddingLeft: 0.125,
+		chartPaddingRight: 0.075,
+		chartPaddingTop: 0.075
+	}
+);
+```
+
+<img width="300" alt="Tíðnirit af normaldreifingu með meðaltal 0,75 og staðalfrávik 0,1. Y ás fer frá 0 prósent og upp í 4 prósent, x ás fer frá 0 og upp í 1. Súlurnar í tíðniritinu eru ljósbláar." src="https://github.com/user-attachments/assets/8342ea60-8875-41b3-9746-d3f274413944">
 
 
 
