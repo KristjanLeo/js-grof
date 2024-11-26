@@ -324,11 +324,20 @@ JSGrof.ChartPrototype = {
 			this._errorMessage('_initOptions', 'minX must be a number between -Infinity and Infinity.');
 			return;
 		}
+		if(this.minX === undefined && this.type === 'histochart') {
+			this._errorMessage('_initOptions', 'missing minX.');
+			return;
+		}
 		this.maxX = options.maxX;
 		if(this.maxX !== undefined && !this._checkFloat(this.maxX, -Infinity, Infinity)) {
 			this._errorMessage('_initOptions', 'maxX must be a number between -Infinity and Infinity.');
 			return;
 		}
+		if(this.maxX === undefined && this.type === 'histochart') {
+			this._errorMessage('_initOptions', 'missing maxX.');
+			return;
+		}
+
 		this.minY = options.minY;
 		if(this.minY !== undefined && !this._checkFloat(this.minY, -Infinity, Infinity)) {
 			this._errorMessage('_initOptions', 'minY must be a number between -Infinity and Infinity.');
@@ -1702,32 +1711,184 @@ JSGrof.BarChart = function(canvasId, data, options) {
 Object.assign(JSGrof.BarChart.prototype, JSGrof.ChartPrototype);
 
 JSGrof.HistoChart = function(canvasId, data, options) {
-    // Data validation
+
+    this.type = 'histochart';
+
+    this._initOptions(options === undefined ? {} : options);
+	this._initCanvas(canvasId);
 
     // If data is not a list
     if(!data.constructor || data.constructor.name !== 'Array') {
-        this._errorMessage('Histogram', 'Data must be an array of items');
+        this._errorMessage('Histochart', 'Data must be an array of numbers');
         return;
+    }
+
+    // If list items are not numbers
+    for(let i = 0; i < data.length; i++) {
+    	if(!this._checkFloat(data[i], 0, Infinity)) {
+    		 this._errorMessage('Histochart', 'All items in data must be positive numbers.');
+        	return;
+    	}
     }
 
     // If data is empty
     if(data.length <= 0) {
-        this._errorMessage('Histogram', 'List must contain more than 0 numbers');
+        this._errorMessage('Histochart', 'List must contain more than 0 numbers');
         return;
     }
 
-    // Group data into buckets and count them
-    let buckets = {}
-    for(let i = 0; i < data.length; i++) {
-        let dataPoint = data[i];
+	this.data = data;
 
-        if(buckets[dataPoint] === undefined) {
-            buckets[dataPoint] = 1;
-        } else {
-            buckets[dataPoint]++;
-        }
-    } 
 
-    // Return a bar char of the buckets
-    return new JSGrof.BarChart(canvasId, buckets, options);
+	this._drawSelf = () => {
+
+
+		let minX = this.minX;
+		let maxX = this.maxX;
+
+	    let minY = Infinity;
+		let maxY = -Infinity;
+		data.forEach((val) => {
+			if(val < minY) minY = val;
+			if(val > maxY) maxY = val;
+		})
+		if(this.minY !== undefined) minY = this.minY;
+		if(this.maxY !== undefined) maxY = this.maxY;
+
+		/* y axis */
+		this.ctx.lineWidth = this.resolutionUpscale*this.lineWidth;
+		this.ctx.strokeStyle = this.axisColor;
+		this.ctx.moveTo(...this._chartCoords(0, 0));
+		this.ctx.lineTo(...this._chartCoords(0, 1));
+		this.ctx.stroke();
+
+		/* x axis */
+		this.ctx.strokeStyle = this.axisColor;
+		this.ctx.moveTo(...this._chartCoords(0, 0));
+		this.ctx.lineTo(...this._chartCoords(1, 0));
+		this.ctx.stroke();
+
+		/* y ticks */
+		let {
+			start: startY,
+			spacing: spacingY,
+			end: endY
+		} = this._dataToTicks(minY, maxY);
+		if(this.minY !== undefined) startY = this.minY;
+		if(this.maxY !== undefined) endY = this.maxY;
+		if(this.tickSpacingY !== undefined) spacingY = this.tickSpacingY;
+
+		let nTicksY = (endY - startY) / spacingY;
+		let tickSpacingY = 1/nTicksY;
+
+		// y ticks
+		let endIdxY = startY + Math.ceil(nTicksY)*spacingY > endY ? nTicksY : nTicksY+1;
+		for(let i = 0; i < endIdxY; i++) {
+			
+			// Line
+			this.ctx.strokeStyle = this.axisColor;
+			this.ctx.beginPath();
+			this.ctx.moveTo(...this._chartCoords(-0.02, tickSpacingY*i));
+			this.ctx.lineTo(...this._chartCoords(0, tickSpacingY*i));
+			this.ctx.closePath();
+			this.ctx.stroke();
+
+			if(this.grid || this.gridY) {
+				this.ctx.strokeStyle = this._withOpacity(this.strokeColor, 0.3);
+				this.ctx.beginPath();
+				this.ctx.moveTo(...this._chartCoords(0, tickSpacingY*i));
+				this.ctx.lineTo(...this._chartCoords(1.0, tickSpacingY*i));
+				this.ctx.closePath();
+				this.ctx.stroke();
+				this.ctx.strokeStyle = this.axisColor;
+			}
+
+			// Text
+			this.ctx.fillStyle = this.strokeColor;
+			this.ctx.font = this.fontSize*this.resolutionUpscale + 'px system-ui';
+			this.ctx.textAlign = 'right';
+			this.ctx.textBaseline = 'middle';
+			this.ctx.fillText(
+				this._formatFloat(this._integerAddition(startY, this._integerMultiplication(i,spacingY))) + (this.tickSuffix ?? this.tickSuffixY ?? ''),
+				...this._chartCoords(-0.03, tickSpacingY*i)
+			);
+		}
+
+		// x ticks
+		let {
+			start: startX,
+			spacing: spacingX,
+			end: endX
+		} = this._dataToTicks(minX, maxX);
+		if(this.minX !== undefined) startX = this.minX;
+		if(this.maxX !== undefined) endX = this.maxX;
+		if(this.tickSpacingX !== undefined) spacingX = this.tickSpacingX;
+
+		let nTicksX = (endX - startX) / spacingX;
+		let tickSpacingX = 1/nTicksX;
+		let endIdxX = startX + Math.ceil(nTicksX)*spacingX > endX ? nTicksX : nTicksX+1;
+		
+		for(let i = 0; i < endIdxX; i++) {
+			
+			// Line
+			this.ctx.beginPath();
+			this.ctx.moveTo(...this._chartCoords(tickSpacingX*i, -0.02));
+			this.ctx.lineTo(...this._chartCoords(tickSpacingX*i, 0));
+			this.ctx.closePath();
+			this.ctx.stroke();
+
+
+			if(this.grid || this.gridX) {
+				this.ctx.strokeStyle = this._withOpacity(this.strokeColor, 0.3);
+				this.ctx.beginPath();
+				this.ctx.moveTo(...this._chartCoords(tickSpacingX*i, 0));
+				this.ctx.lineTo(...this._chartCoords(tickSpacingX*i, 1.0));
+				this.ctx.closePath();
+				this.ctx.stroke();
+				this.ctx.strokeStyle = this.strokeColor;
+			}
+
+			// Text
+			this.ctx.fillStyle = this.strokeColor;
+			this.ctx.font = this.fontSize*this.resolutionUpscale + 'px system-ui';
+			this.ctx.textAlign = 'center';
+			this.ctx.textBaseline = 'top';
+			this.ctx.fillText(
+				this._formatFloat(this._integerAddition(startX, this._integerMultiplication(i,spacingX))) + (this.tickSuffixX ?? ''),
+				...this._chartCoords(tickSpacingX*i, -0.03)
+			);
+		}
+
+		// Bars
+		let barSize = 1/data.length;
+		for(let i = 0; i < data.length; i++) {
+
+			// draw bucket
+			let [barXMin, barYMin] = this._chartCoords(barSize*i, 0);
+			let [barXMax, barYMax] = this._chartCoords(
+				barSize*(i+1),
+				(data[i] - startY) / (endY - startY)
+			);
+			this.ctx.fillStyle = this.dataColors[0];
+			this.ctx.fillRect(
+				barXMin, barYMin,
+				barXMax-barXMin, barYMax-barYMin
+			);
+			this.ctx.strokeStyle = this._getBWContrasting(this.dataColors[0]);
+			this.ctx.strokeRect(
+				barXMin, barYMin,
+				barXMax-barXMin, barYMax-barYMin
+			);
+		}
+	}
+	if(!this.animated) {this.draw(); this.draw();}
+
+	this._animateSelf = () => {
+
+	}
+
+	this._mousemove = (x, y) => {
+
+	}
 }
+Object.assign(JSGrof.HistoChart.prototype, JSGrof.ChartPrototype);
