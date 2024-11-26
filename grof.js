@@ -1782,10 +1782,15 @@ JSGrof.HistoChart = function(canvasId, data, options) {
 	    }
 
 	    if(this.portion) {
-	    	buckets = buckets.map((i) => 100*i/data.length);
+	    	if(this.includeMaxValueInLastBar) {
+	    		buckets = buckets.map((i) => 100*i/data.length);
+	    	} else {
+	    		buckets = buckets.map((i) => 100*i/(data.length - buckets[buckets.length-1]));
+	    	}
 	    	this.tickSuffixY = ' %';
 	    }
 
+	    console.log(buckets);
 
 	    let minY = Infinity;
 		let maxY = -Infinity;
