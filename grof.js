@@ -400,19 +400,6 @@ JSGrof.ChartPrototype = {
 			this._errorMessage('_initOptions', 'floatFormat must be a string.');
 			return;
 		}
-
-		// Histochart portion
-		this.portion = options.portion;
-		if(this.portion !== undefined && !this._checkBoolean(this.portion)) {
-			this._errorMessage('_initOptions', 'portion must be a boolean.');
-			return;
-		}
-
-		this.includeMaxValueInLastBar = options.includeMaxValueInLastBar;
-		if(this.includeMaxValueInLastBar !== undefined && !this._checkBoolean(this.includeMaxValueInLastBar)) {
-			this._errorMessage('_initOptions', 'includeMaxValueInLastBar must be a boolean.');
-			return;
-		}
 	},
 
 	_checkSixDigitHex(hex) {
