@@ -148,9 +148,14 @@ let linurit = new JSGrof.LineChart(
 ```javascript
 let avg = 0.75;
 let std = 0.1;
+
+let nd = Array.from(Array(101).keys()).map((x) => 1/(std*Math.sqrt(2*Math.PI)*Math.exp(0.5*((x/100 - avg)/(std))**2)));
+let sum = nd.reduce((a, b) => a+b, 0);
+nd = nd.map((x) => 100*x/sum);
+
 let histogram = new JSGrof.HistoChart(
 	'canvas-id',
-	Array.from(Array(101).keys()).map((x) => 1/(std*Math.sqrt(2*Math.PI)*Math.exp(0.5*((x/100 - avg)/(std))**2))),
+	nd,
 	{
 		minX: 0,
 		maxX: 1,
@@ -165,8 +170,7 @@ let histogram = new JSGrof.HistoChart(
 );
 ```
 
-<img width="300" alt="Tíðnirit af normaldreifingu með meðaltal 0,75 og staðalfrávik 0,1. Y ás fer frá 0 prósent og upp í 4 prósent, x ás fer frá 0 og upp í 1. Súlurnar í tíðniritinu eru ljósbláar." src="https://github.com/user-attachments/assets/8342ea60-8875-41b3-9746-d3f274413944">
-
+<img width="300" alt="Tíðnirit af normaldreifingu með meðaltal 0,75 og staðalfrávik 0,1. Y ás fer frá 0 prósent og upp í 4,5 prósent, x ás fer frá 0 og upp í 1. Súlurnar í tíðniritinu eru ljósbláar." src="https://github.com/user-attachments/assets/1bd0ccbe-7a06-4ee4-b2cf-63ad4dcf66a7">
 
 
 # 7. Nánari skjölun
