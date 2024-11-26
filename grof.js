@@ -1765,7 +1765,6 @@ JSGrof.HistoChart = function(canvasId, data, options) {
 		if(this.maxX !== undefined) maxX = this.maxX;
 
 
-
 		if(parseInt((maxX - minX) / this.bucketSize)*this.bucketSize !== this._integerAddition(maxX, -minX)) {
 			this._errorMessage('Histochart', 'bucketSize does not fit min and max x values');
 	        return;
@@ -1773,8 +1772,11 @@ JSGrof.HistoChart = function(canvasId, data, options) {
 
 		// Group data into buckets and count them
 	    let buckets = Array(parseInt((maxX - minX) / this.bucketSize)+1).fill(0);
+	    let totalCnt = 0;
 	    for(let i = 0; i < this.data.length; i++) {
+	    	if(this.data[i] > maxX) continue;
 	        buckets[parseInt((this.data[i] - minX) / this.bucketSize)]++;
+	        totalCnt++;
 	    }
 
 	    if(this.includeMaxValueInLastBar) {
@@ -1783,18 +1785,16 @@ JSGrof.HistoChart = function(canvasId, data, options) {
 
 	    if(this.portion) {
 	    	if(this.includeMaxValueInLastBar) {
-	    		buckets = buckets.map((i) => 100*i/data.length);
+	    		buckets = buckets.map((i) => 100*i/totalCnt);
 	    	} else {
-	    		buckets = buckets.map((i) => 100*i/(data.length - buckets[buckets.length-1]));
+	    		buckets = buckets.map((i) => 100*i/(totalCnt - buckets[buckets.length-1]));
 	    	}
 	    	this.tickSuffixY = ' %';
 	    }
 
-	    console.log(buckets);
-
 	    let minY = Infinity;
 		let maxY = -Infinity;
-		buckets.forEach((val) => {
+		buckets.slice(0, buckets.length-1).forEach((val) => {
 			if(val < minY) minY = val;
 			if(val > maxY) maxY = val;
 		})
