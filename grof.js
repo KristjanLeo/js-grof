@@ -1237,6 +1237,8 @@ JSGrof.LineChart = function (canvasId, data, options) {
 		if(this.tickSpacingX !== undefined) spacingX = this.tickSpacingX;
 		if(this.tickSpacingY !== undefined) spacingY = this.tickSpacingY;
 
+		let closestTexts = [], names = Object.keys(this.data);
+
 		Object.values(this.data).forEach((points, j) => {
 			
 			let closestD = Infinity;
@@ -1249,58 +1251,92 @@ JSGrof.LineChart = function (canvasId, data, options) {
 				}
 			}
 
+			let txt;
+			if(this.axisLabels && parseInt(closest[0]) === closest[0]) {
+				let xValue = spacingX === 1 ? (this.axisLabels[parseInt(closest[0])]) : '?';
+				txt = `(${xValue}; ${this._formatFloat((closest[1]).toFixed(this.interactivityPrecisionY)) + (this.tickSuffixY ?? '')})`;
+			} else {
+				txt = `(${this._formatFloat((closest[0]).toFixed(this.interactivityPrecisionX)) + (this.tickSuffixX ?? '')}; ${this._formatFloat((closest[1]).toFixed(this.interactivityPrecisionY)) + (this.tickSuffixY ?? '')})`;
+			}
+			closestTexts.push(txt);
+
 			let pos = this._chartCoords(
 				(closest[0] - startX) / (endX - startX),
 				(closest[1] - startY) / (endY - startY)
 			);
-			this.ctx.textAlign = 'center';
-			this.ctx.textBaseline = 'middle';
-			this.ctx.fillStyle = this.strokeColor;
-			this.ctx.font = this.fontSize*this.resolutionUpscale + 'px system-ui';
-			let txt;
-			if(this.axisLabels && parseInt(closest[0]) === closest[0]) {
-				let xValue = spacingX === 1 ? (this.axisLabels[parseInt(closest[0])]) : '?';
-				txt = `${xValue}; ${this._formatFloat((closest[1]).toFixed(this.interactivityPrecisionY)) + (this.tickSuffixY ?? '')}`;
-			} else {
-				txt = `${this._formatFloat((closest[0]).toFixed(this.interactivityPrecisionX)) + (this.tickSuffixX ?? '')}; ${this._formatFloat((closest[1]).toFixed(this.interactivityPrecisionY)) + (this.tickSuffixY ?? '')}`;
-			}
-			let txtWidth = this.ctx.measureText(txt).width;
-			this.ctx.fillStyle = this.bgColor ?? this._getBWContrasting(this.strokeColor);
-			this.ctx.strokeStyle = this.strokeColor;
-			this.ctx.beginPath();
-			this.ctx.roundRect ? this.ctx.roundRect(
-					pos[0] - txtWidth/2 - this.fontSize*this.resolutionUpscale/2, 
-					pos[1] - 3.5*this.resolutionUpscale*5*(this.fontSize/JSGrof.CHART_CONSTANTS.FONT_SIZE) - this.fontSize*this.resolutionUpscale/2 - this.fontSize*this.resolutionUpscale/2,
-					txtWidth + this.fontSize*this.resolutionUpscale,
-					this.fontSize*this.resolutionUpscale + this.fontSize*this.resolutionUpscale,
-					this.fontSize*this.resolutionUpscale/2
-			) : this.ctx.rect(
-					pos[0] - txtWidth/2 - this.fontSize*this.resolutionUpscale/2, 
-					pos[1] - 3.5*this.resolutionUpscale*5*(this.fontSize/JSGrof.CHART_CONSTANTS.FONT_SIZE) - this.fontSize*this.resolutionUpscale/2 - this.fontSize*this.resolutionUpscale/2,
-					txtWidth + this.fontSize*this.resolutionUpscale,
-					this.fontSize*this.resolutionUpscale + this.fontSize*this.resolutionUpscale
-			);
-			this.ctx.closePath();
-			this.ctx.fill();
-			this.ctx.stroke();
 
-			this.ctx.fillStyle = this.strokeColor;
-			this.ctx.fillText(
-				txt,
-				pos[0], pos[1] - 3.5*this.resolutionUpscale*5*(this.fontSize/JSGrof.CHART_CONSTANTS.FONT_SIZE)
-			);
 			this.ctx.beginPath();
-			this.ctx.arc(
-				pos[0],
-				pos[1],
-				this.resolutionUpscale*5*(this.fontSize/JSGrof.CHART_CONSTANTS.FONT_SIZE), 
-				0,
-				360
+			// this.ctx.arc(
+			// 	pos[0],
+			// 	pos[1],
+			// 	this.resolutionUpscale*5*(this.fontSize/JSGrof.CHART_CONSTANTS.FONT_SIZE), 
+			// 	0,
+			// 	360
+			// );
+			this.ctx.rect(
+				pos[0] - 0.5 * this.fontSize * this.resolutionUpscale,
+				pos[1] - 0.5 * this.fontSize * this.resolutionUpscale,
+				this.fontSize * this.resolutionUpscale,
+				this.fontSize * this.resolutionUpscale
 			);
 			this.ctx.fillStyle = this.dataColors[j % this.dataColors.length];
 			this.ctx.fill();
 		});
 
+		let pos = this._chartCoords(x, y);
+		
+		closestTexts = closestTexts.map((x, i) => names[i] + ': ' + x);
+		let txtWidth = 0;
+		for(let i = 0; i < closestTexts.length; i++) {
+			let w = this.ctx.measureText(closestTexts[i]).width
+			if(w > txtWidth) txtWidth = w;
+		}
+		txtWidth += this.fontSize*this.resolutionUpscale/2;
+
+		let txtHeight = closestTexts.length * this.fontSize * this.resolutionUpscale*2.5;
+		pos[1] -= txtHeight + this.fontSize * this.resolutionUpscale * 0.5;
+
+		this.ctx.fillStyle = this.bgColor ?? this._getBWContrasting(this.strokeColor);
+		this.ctx.strokeStyle = this.strokeColor;
+		this.ctx.beginPath();
+		this.ctx.roundRect ? this.ctx.roundRect(
+				pos[0] - txtWidth/2 - this.fontSize*this.resolutionUpscale, 
+				pos[1],
+				txtWidth + this.fontSize*this.resolutionUpscale*2,
+				txtHeight,
+				this.fontSize*this.resolutionUpscale/2
+		) : this.ctx.rect(
+				pos[0] - txtWidth/2 - this.fontSize*this.resolutionUpscale, 
+				pos[1],
+				txtWidth + this.fontSize*this.resolutionUpscale*2,
+				txtHeight
+		);
+		this.ctx.closePath();
+		this.ctx.fill();
+		this.ctx.stroke();
+
+
+		this.ctx.textAlign = 'left';
+		this.ctx.textBaseline = 'middle';
+		this.ctx.font = this.fontSize*this.resolutionUpscale + 'px system-ui';
+		this.ctx.fillStyle = this.strokeColor;
+		for(let i = 0; i < closestTexts.length; i++) {
+
+			this.ctx.fillStyle = this.strokeColor;
+			this.ctx.fillText(
+				closestTexts[i],
+				pos[0] + this.fontSize*this.resolutionUpscale - txtWidth*0.5,
+				pos[1] + ((i+0.5) / closestTexts.length) * txtHeight
+			);
+
+			this.ctx.fillStyle = this.dataColors[i % this.dataColors.length];
+			this.ctx.fillRect(
+				pos[0] - this.fontSize*this.resolutionUpscale/4 - txtWidth * 0.5,
+				pos[1] + ((i+0.5) / closestTexts.length) * txtHeight - this.fontSize*this.resolutionUpscale/4,
+				this.fontSize*this.resolutionUpscale/2,
+				this.fontSize*this.resolutionUpscale/2
+			)
+		}
 	}
 }
 Object.assign(JSGrof.LineChart.prototype, JSGrof.ChartPrototype);
